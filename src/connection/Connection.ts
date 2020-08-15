@@ -6,12 +6,14 @@ import { substringAfter } from '../utils/StringUtils';
 import Response from './Response';
 
 export default class Connection {
+    private baseUrl: string;
     private connection: AxiosInstance;
     private cookieJar: CookieJar;
     private logger: Logger;
     private requestVerificationToken: string | undefined;
 
-    constructor(activeLog = false) {
+    constructor(baseUrl: string, activeLog = false) {
+        this.baseUrl = baseUrl;
         this.connection = this.createConnection();
         this.cookieJar = new tough.CookieJar();
         this.logger = this.buildLogger(activeLog);
@@ -43,6 +45,10 @@ export default class Connection {
     }
 
     async get(url: string, maxRedirection = 5): Promise<Response> {
+        if (url.startsWith('/')) {
+            url = `${this.baseUrl}${url}`;
+        }
+
         this.logger.debug(`GET connect on url : ${url}`);
 
         const cookies = await this.getCookies(url);
@@ -87,6 +93,10 @@ export default class Connection {
     }
 
     async post(url: string, parameters: string, additionalHeaders: any, maxRedirection = 5): Promise<Response> {
+        if (url.startsWith('/')) {
+            url = `${this.baseUrl}${url}`;
+        }
+
         this.logger.debug(`POST connect on url : ${url}`);
         this.logger.debug(`Parameters : ${parameters}`);
 

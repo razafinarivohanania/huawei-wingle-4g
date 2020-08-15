@@ -1,11 +1,41 @@
-import Home from './menu/Home';
-import Sms from './menu/Sms';
-import Statistics from './menu/Statistics';
-import Ussd from './menu/Ussd';
+import Home from './page/Home';
+import Sms from './page/Sms';
+import Statistics from './page/Statistics';
+import Ussd from './page/Ussd';
+import Login from './model/Login';
+import Connection from './connection/Connection';
 
-export {
-    Home,
-    Sms,
-    Statistics,
-    Ussd
+export default class {
+
+    private login: Login;
+    private connection: Connection;
+    private home: Home;
+    private sms: Sms;
+    private statistics: Statistics;
+    private ussd: Ussd;
+
+    constructor(host: string, login: Login, activeLog = false) {
+        this.login = login;
+        this.connection = new Connection(`http://${host}`, activeLog);
+        this.home = new Home(this.connection);
+        this.sms = new Sms(this.login, this.connection);
+        this.statistics = new Statistics(this.login, this.connection);
+        this.ussd = new Ussd(this.login, this.connection);
+    }
+
+    getHome(): Home {
+        return this.home;
+    }
+
+    getSms(): Sms {
+        return this.sms;
+    }
+
+    getStatistics(): Statistics {
+        return this.statistics;
+    }
+
+    getUssd(): Ussd {
+        return this.ussd;
+    }
 };

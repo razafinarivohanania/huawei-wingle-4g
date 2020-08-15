@@ -2,13 +2,16 @@ import Login from "../model/Login";
 import Statistics from "../model/statistics/Statistics";
 import DataPlan from "../model/statistics/DataPlan";
 import WlanClient from "../model/statistics/WlanClient";
+import Connection from "../connection/Connection";
 
 export default class {
 
     private login: Login;
+    private connection: Connection;
 
-    constructor(login: Login) {
+    constructor(login: Login, connection: Connection) {
         this.login = login;
+        this.connection = connection;
     }
 
     async getStatistics(): Promise<Statistics> {
@@ -29,7 +32,7 @@ export default class {
         return new Promise(resolve => resolve());//TODO
     }
 
-    async removeStatistics() : Promise<void> {
+    async removeStatistics(): Promise<void> {
         return new Promise(resolve => resolve());//TODO
     }
 
