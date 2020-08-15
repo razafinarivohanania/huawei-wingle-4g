@@ -104,7 +104,8 @@ export default class Connection {
             this.tokens.requestVerificationTokenTwo = tokens.requestVerificationTokenTwo;
         }
 
-        this.logger.debug(response.headers);
+        this.logger.debug('Header', response.headers);
+        this.logger.debug('Response', response.data);
         return {
             status: response.status,
             document
@@ -129,6 +130,8 @@ export default class Connection {
         if (additionalHeaders) {
             request.headers = additionalHeaders;
         }
+
+        this.logger.debug('Request', request);
 
         if (cookies) {
             if (!request.headers) {
@@ -159,7 +162,8 @@ export default class Connection {
 
         this.tokens = this.extractTokens(response, document);
 
-        this.logger.debug(response.headers);
+        this.logger.debug('Headers', response.headers);
+        this.logger.debug('Response', response.data);
         return {
             status: response.status,
             document
