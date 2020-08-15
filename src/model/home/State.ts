@@ -1,4 +1,7 @@
 export enum State {
-    ON,
-    OFF
+    CONNECTING,
+    CONNECTED,
+    DISCONNECTED,
+    DISCONNECTING,
+    STATISTIC_TRAFFIC_EXCEEDED_LIMITED
 };

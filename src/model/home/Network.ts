@@ -1,11 +1,12 @@
 import { State } from './State';
-import StateWlan from './StateWlan';
+
+export interface Signal {
+    strength: number,
+    total: number
+};
 
 export default interface Network {
-    signal: {
-        value: number,
-        total: number
-    },
+    signal: Signal,
     type: string,
     operator: string | null | undefined,
     state: State

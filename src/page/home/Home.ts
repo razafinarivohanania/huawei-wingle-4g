@@ -43,7 +43,7 @@ export default class {
 
     private getStateWlan(document: Document): StateWlan {
         return {
-            state: State.OFF,
+            state: State.DISCONNECTED,
             users: 0
         }
     }

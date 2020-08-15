@@ -1,5 +1,5 @@
 import Connection from "../../connection/Connection";
-import Network from "../../model/home/Network";
+import Network, { Signal } from "../../model/home/Network";
 import { State } from '../../model/home/State';
 
 const NET_WORK_TYPE_EX_GSM = '1';
@@ -55,6 +55,60 @@ const MACRO_NET_WORK_TYPE_HSPA_PLUS_MIMO = '18';
 
 const MACRO_NET_WORK_TYPE_LTE = '19';
 
+const DISCONNECTED_STATUS = [
+    '2',
+    '3',
+    '5',
+    '8',
+    '20',
+    '21',
+    '23',
+    '27',
+    '28',
+    '29',
+    '30',
+    '31',
+    '32',
+    '33',
+    '65538',
+    '65539',
+    '65567',
+    '65568',
+    '131073',
+    '131074',
+    '131076',
+    '131078',
+    '7',
+    '11',
+    '14',
+    '37',
+    '131079',
+    '131080',
+    '131081',
+    '131082',
+    '131083',
+    '131084',
+    '131085',
+    '131086',
+    '131087',
+    '131088',
+    '131089',
+    '905',
+    '12',
+    '13',
+    '902',
+    '112',
+    '114',
+    '113',
+    '115'
+];
+
+const CONNECTING_STATUS = '900';
+const DISCONNECTING_STATUS = '903';
+const CONNECTED_STATUS = '901';
+
+const STATISTIC_TRAFFIC_EXCEEDED_LIMITED = '201';
+
 export default class {
 
     private connection: Connection;
@@ -64,23 +118,24 @@ export default class {
     }
 
     async getNetwork(): Promise<Network> {
-        const response = await this.connection.get('/api/net/current-plmn');
-        const document = response.document;
+        const statusDocument = await this.connectStatus();
+        const operator = await this.getOperator();
+        const type = this.getType(statusDocument);
+        const signal = this.getSignal(statusDocument);
+        const state = this.getState(statusDocument);
 
-        const operator = this.getOperator(document);
-        const type = await this.getType();
         return {
             type,
             operator,
-            signal: {
-                value: 0,
-                total: 5
-            },
-            state: State.OFF
+            signal,
+            state
         };
     }
 
-    private getOperator(document: Document): string | null | undefined {
+    private async getOperator(): Promise<string> {
+        const response = await this.connection.get('/api/net/current-plmn');
+        const document = response.document;
+
         let operatorElement = document.querySelector('ShortName');
         let operator = operatorElement?.textContent;
 
@@ -89,13 +144,19 @@ export default class {
             operator = operatorElement?.textContent;
         }
 
+        if (!operator) {
+            throw new Error('Unable to find network operator');
+        }
+
         return operator;
     }
 
-    private async getType(): Promise<string> {
+    private async connectStatus(): Promise<Document> {
         const response = await this.connection.get('/api/monitoring/status');
-        const document = response.document;
+        return response.document;
+    }
 
+    private getType(document: Document): string {
         const currentNetworkTypeExElement = document.querySelector('CurrentNetworkTypeEx');
         const currentNetworkTypeEx = currentNetworkTypeExElement?.textContent;
         if (currentNetworkTypeEx) {
@@ -167,4 +228,48 @@ export default class {
         }
     }
 
+    private getSignal(document: Document): Signal {
+        let signalElement = document.querySelector('SignalStrength');
+        let signal = signalElement?.textContent;
+
+        if (!signal) {
+            signalElement = document.querySelector('SignalIcon');
+            signal = signalElement?.textContent;
+        }
+
+        if (!signal) {
+            throw new Error('Unable to retrieve signal');
+        }
+
+        return {
+            strength: +signal,
+            total: 5
+        };
+    }
+
+    private getState(document: Document): State {
+        const connectionStatusElement = document.querySelector('ConnectionStatus');
+        const connectionStatus = connectionStatusElement?.textContent;
+
+        if (!connectionStatus) {
+            throw new Error('Unable to retrieve network state');
+        }
+
+        if (DISCONNECTED_STATUS.includes(connectionStatus)) {
+            return State.DISCONNECTED;
+        }
+
+        switch (connectionStatus) {
+            case STATISTIC_TRAFFIC_EXCEEDED_LIMITED:
+                return State.STATISTIC_TRAFFIC_EXCEEDED_LIMITED;
+            case CONNECTING_STATUS:
+                return State.CONNECTING;
+            case DISCONNECTING_STATUS:
+                return State.DISCONNECTING;
+            case CONNECTED_STATUS:
+                return State.CONNECTED;
+            default:
+                return State.DISCONNECTED;
+        }
+    }
 }
