@@ -146,6 +146,10 @@ export default class Connection {
         };
     }
 
+    getRequestVerificationToken() : string | undefined {
+        return this.requestVerificationToken;
+    }
+
     private async getCookies(url: string) {
         return new Promise((resolve, reject) => {
             this.cookieJar.getCookies(url, { secure: true }, (err, cookies) => {

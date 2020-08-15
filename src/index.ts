@@ -2,25 +2,22 @@ import Home from './page/home/Home';
 import Sms from './page/Sms';
 import Statistics from './page/Statistics';
 import Ussd from './page/Ussd';
-import Login from './model/Login';
 import Connection from './connection/Connection';
 
 export default class HuaweiWingle4G {
 
-    private login: Login;
     private connection: Connection;
     private home: Home;
     private sms: Sms;
     private statistics: Statistics;
     private ussd: Ussd;
 
-    constructor(login: Login, host = HuaweiWingle4G.getDefaultHost(), activeLog = false) {
-        this.login = login;
+    constructor(username: string, password: string, host = HuaweiWingle4G.getDefaultHost(), activeLog = false) {
         this.connection = new Connection(`http://${host}`, activeLog);
-        this.home = new Home(this.connection);
-        this.sms = new Sms(this.login, this.connection);
-        this.statistics = new Statistics(this.login, this.connection);
-        this.ussd = new Ussd(this.login, this.connection);
+        this.home = new Home(username, password, this.connection);
+        this.sms = new Sms(username, password, this.connection);
+        this.statistics = new Statistics(username, password, this.connection);
+        this.ussd = new Ussd(username, password, this.connection);
     }
 
     getHome(): Home {

@@ -6,11 +6,13 @@ import Connection from "../connection/Connection";
 
 export default class {
 
-    private login: Login;
+    private username: string;
+    private password: string;
     private connection: Connection;
 
-    constructor(login: Login, connection: Connection) {
-        this.login = login;
+    constructor(username: string, password: string, connection: Connection) {
+        this.username = username;
+        this.password = password;
         this.connection = connection;
     }
 

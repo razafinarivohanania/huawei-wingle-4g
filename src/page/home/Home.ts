@@ -5,28 +5,35 @@ import NetworkExtractor from './NetworkExtractor';
 import CurrentConnectionExtractor from './CurrentConnectionExtractor';
 import Network from '../../model/home/Network';
 import WlanStateExtractor from './WlanStateExtractor';
+import DataMobile from './DataMobile';
 
 export default class {
 
     private networkExtractor: NetworkExtractor;
     private currentConnectionExtractor: CurrentConnectionExtractor;
     private stateWlanExtractor: WlanStateExtractor;
+    private dataMobile: DataMobile;
 
-    constructor(connection: Connection, activeLog = false) {
+    constructor(username: string, password: string, connection: Connection, activeLog = false) {
         this.networkExtractor = new NetworkExtractor(connection, activeLog);
         this.currentConnectionExtractor = new CurrentConnectionExtractor(connection, activeLog);
         this.stateWlanExtractor = new WlanStateExtractor(connection, activeLog);
+        this.dataMobile = new DataMobile(username, password, connection, activeLog);
     }
 
-    async getNetwork(): Promise<Network> {
+    getNetwork(): Promise<Network> {
         return this.networkExtractor.getNetwork();
     }
 
-    async getCurrentConnection(): Promise<CurrentConnection> {
+    getCurrentConnection(): Promise<CurrentConnection> {
         return this.currentConnectionExtractor.getCurrentConnection();
     }
 
-    async getStateWlan(): Promise<StateWlan> {
+    getStateWlan(): Promise<StateWlan> {
         return this.stateWlanExtractor.getStateWlan();
+    }
+
+    connectDataMobile(): Promise<boolean> {
+        return this.dataMobile.connect();
     }
 }

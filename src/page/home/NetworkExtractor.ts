@@ -111,7 +111,7 @@ const CONNECTED_STATUS = '901';
 
 const STATISTIC_TRAFFIC_EXCEEDED_LIMITED = '201';
 
-export default class {
+export default class NetworktExtractor {
 
     private connection: Connection;
     private logger: Logger;
@@ -134,7 +134,7 @@ export default class {
         this.logger.debug(`Type : ${type}`);
 
         const signal = this.getSignal(statusDocument);
-        const state = this.getState(statusDocument);
+        const state = NetworktExtractor.getState(statusDocument);
         this.logger.debug(`State : ${state}`);
 
         return {
@@ -263,7 +263,7 @@ export default class {
         return { strength, total };
     }
 
-    private getState(document: Document): State {
+    static getState(document: Document): State {
         const connectionStatusElement = document.querySelector('ConnectionStatus');
         const connectionStatus = connectionStatusElement?.textContent;
 
