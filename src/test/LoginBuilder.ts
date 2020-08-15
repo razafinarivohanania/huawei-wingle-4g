@@ -1,5 +1,5 @@
 import Connection from "../connection/Connection";
-import HuawerWingle4G from '../index';
+import HuawerWingle4G from '../HuaweiWingle4G';
 import ask from '../utils/Ask';
 import Login from '../connection/Login';
 
