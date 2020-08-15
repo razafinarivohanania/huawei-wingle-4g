@@ -97,9 +97,6 @@ export default class Connection {
     }
 
     async post(url: string, parameters: string, maxRedirection = 5): Promise<Response> {
-
-        console.log(this.tokens);
-
         if (url.startsWith('/')) {
             url = `${this.baseUrl}${url}`;
         }
@@ -223,8 +220,6 @@ export default class Connection {
         } else if (headers.__requestverificationtoken) {
             this.tokens.push(headers.__requestverificationtoken);
         }
-
-        console.log(this.tokens);
     }
 
     private storeTokensFromDocument(document: Document) {

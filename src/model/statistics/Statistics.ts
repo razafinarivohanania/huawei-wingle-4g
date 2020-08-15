@@ -1,15 +1,16 @@
-export interface MonthlyDataUsage {
+export interface MonthlyDataUsed {
     duration: number,
     used: number,
-    total: number
+    limit: number
 };
 
-export interface TotalDataUsage {
+export interface TotalDataUsed {
     duration: number,
     used: number
 };
 
 export default interface Statistics {
-    monthlyDataUsage: MonthlyDataUsage,
-    totalDataUsage: TotalDataUsage
+    monthlyDataUsed: MonthlyDataUsed,
+    totalDataUsed: TotalDataUsed,
+    lastClearTime: number
 };

@@ -2,27 +2,18 @@ import Statistics from "../../model/statistics/Statistics";
 import DataPlan from "../../model/statistics/DataPlan";
 import WlanClient from "../../model/statistics/WlanClient";
 import Login from "../../connection/Login";
+import StatisticsExtractor from "./StatisticsExtractor";
 
 export default class {
 
-    private login: Login;
+    private statisticsExtractor: StatisticsExtractor;
 
-    constructor(login: Login) {
-        this.login = login;
+    constructor(login: Login, activeLog = false) {
+        this.statisticsExtractor = new StatisticsExtractor(login, activeLog);
     }
 
-    async getStatistics(): Promise<Statistics> {
-        return new Promise(resolve => resolve({
-            monthlyDataUsage: {
-                duration: 0,
-                used: 0,
-                total: 0
-            },
-            totalDataUsage: {
-                duration: 0,
-                used: 0
-            }
-        }));//TODO
+     getStatistics(): Promise<Statistics> {
+        return this.statisticsExtractor.getStatistics();
     }
 
     async updateDataPlan(dataPlan: DataPlan): Promise<void> {
