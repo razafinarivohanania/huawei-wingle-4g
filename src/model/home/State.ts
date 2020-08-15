@@ -1,4 +1,6 @@
 export enum State {
+    ON,
+    OFF,
     CONNECTING,
     CONNECTED,
     DISCONNECTED,

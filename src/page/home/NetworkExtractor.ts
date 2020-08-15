@@ -1,6 +1,8 @@
 import Connection from "../../connection/Connection";
 import Network, { Signal } from "../../model/home/Network";
 import { State } from '../../model/home/State';
+import log4js, { Logger } from 'log4js';
+import { substringAfter } from '../../utils/StringUtils';
 
 const NET_WORK_TYPE_EX_GSM = '1';
 const NET_WORK_TYPE_EX_GPRS = '2';
@@ -35,25 +37,25 @@ const NET_WORK_TYPE_EX_TD_HSPA = '64';
 const NET_WORK_TYPE_EX_TD_HSPA_PLUS = '65';
 const NET_WORK_TYPE_EX_LTE = '101';
 
-const MACRO_NET_WORK_TYPE_GSM = '1';
-const MACRO_NET_WORK_TYPE_GPRS = '2';
-const MACRO_NET_WORK_TYPE_EDGE = '3';
-const MACRO_NET_WORK_TYPE_1xRTT = '13';
-const MACRO_NET_WORK_TYPE_1xEVDV = '15';
+const NET_WORK_TYPE_GSM = '1';
+const NET_WORK_TYPE_GPRS = '2';
+const NET_WORK_TYPE_EDGE = '3';
+const NET_WORK_TYPE_1xRTT = '13';
+const NET_WORK_TYPE_1xEVDV = '15';
 
-const MACRO_NET_WORK_TYPE_WCDMA = '4';
-const MACRO_NET_WORK_TYPE_TDSCDMA = '8';
-const MACRO_NET_WORK_TYPE_EVDO_REV_0 = '10';
-const MACRO_NET_WORK_TYPE_EVDO_REV_A = '11';
-const MACRO_NET_WORK_TYPE_EVDO_REV_B = '12';
-const MACRO_NET_WORK_TYPE_HSDPA = '5';
-const MACRO_NET_WORK_TYPE_HSUPA = '6';
-const MACRO_NET_WORK_TYPE_HSPA = '7';
-const MACRO_NET_WORK_TYPE_HSPA_PLUS = '9';
-const MACRO_NET_WORK_TYPE_HSPA_PLUS_64QAM = '17';
-const MACRO_NET_WORK_TYPE_HSPA_PLUS_MIMO = '18';
+const NET_WORK_TYPE_WCDMA = '4';
+const NET_WORK_TYPE_TDSCDMA = '8';
+const NET_WORK_TYPE_EVDO_REV_0 = '10';
+const NET_WORK_TYPE_EVDO_REV_A = '11';
+const NET_WORK_TYPE_EVDO_REV_B = '12';
+const NET_WORK_TYPE_HSDPA = '5';
+const NET_WORK_TYPE_HSUPA = '6';
+const NET_WORK_TYPE_HSPA = '7';
+const NET_WORK_TYPE_HSPA_PLUS = '9';
+const NET_WORK_TYPE_HSPA_PLUS_64QAM = '17';
+const NET_WORK_TYPE_HSPA_PLUS_MIMO = '18';
 
-const MACRO_NET_WORK_TYPE_LTE = '19';
+const NET_WORK_TYPE_LTE = '19';
 
 const DISCONNECTED_STATUS = [
     '2',
@@ -112,17 +114,28 @@ const STATISTIC_TRAFFIC_EXCEEDED_LIMITED = '201';
 export default class {
 
     private connection: Connection;
+    private logger: Logger;
 
-    constructor(connection: Connection) {
+    constructor(connection: Connection, activeLog: boolean) {
         this.connection = connection;
+        this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
+        this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 
     async getNetwork(): Promise<Network> {
+        await this.connection.get('/');
+
         const statusDocument = await this.connectStatus();
+
         const operator = await this.getOperator();
+        this.logger.debug(`Operator : ${operator}`);
+
         const type = this.getType(statusDocument);
+        this.logger.debug(`Type : ${type}`);
+
         const signal = this.getSignal(statusDocument);
         const state = this.getState(statusDocument);
+        this.logger.debug(`State : ${state}`);
 
         return {
             type,
@@ -203,25 +216,25 @@ export default class {
         const currentNetworkTypeElement = document.querySelector('CurrentNetworkType');
         const currentNetworkType = currentNetworkTypeElement?.textContent;
         switch (currentNetworkType) {
-            case MACRO_NET_WORK_TYPE_GSM:
-            case MACRO_NET_WORK_TYPE_GPRS:
-            case MACRO_NET_WORK_TYPE_EDGE:
-            case MACRO_NET_WORK_TYPE_1xRTT:
-            case MACRO_NET_WORK_TYPE_1xEVDV:
+            case NET_WORK_TYPE_GSM:
+            case NET_WORK_TYPE_GPRS:
+            case NET_WORK_TYPE_EDGE:
+            case NET_WORK_TYPE_1xRTT:
+            case NET_WORK_TYPE_1xEVDV:
                 return '2G';
-            case MACRO_NET_WORK_TYPE_WCDMA:
-            case MACRO_NET_WORK_TYPE_TDSCDMA:
-            case MACRO_NET_WORK_TYPE_EVDO_REV_0:
-            case MACRO_NET_WORK_TYPE_EVDO_REV_A:
-            case MACRO_NET_WORK_TYPE_EVDO_REV_B:
-            case MACRO_NET_WORK_TYPE_HSDPA:
-            case MACRO_NET_WORK_TYPE_HSUPA:
-            case MACRO_NET_WORK_TYPE_HSPA:
-            case MACRO_NET_WORK_TYPE_HSPA_PLUS:
-            case MACRO_NET_WORK_TYPE_HSPA_PLUS_64QAM:
-            case MACRO_NET_WORK_TYPE_HSPA_PLUS_MIMO:
+            case NET_WORK_TYPE_WCDMA:
+            case NET_WORK_TYPE_TDSCDMA:
+            case NET_WORK_TYPE_EVDO_REV_0:
+            case NET_WORK_TYPE_EVDO_REV_A:
+            case NET_WORK_TYPE_EVDO_REV_B:
+            case NET_WORK_TYPE_HSDPA:
+            case NET_WORK_TYPE_HSUPA:
+            case NET_WORK_TYPE_HSPA:
+            case NET_WORK_TYPE_HSPA_PLUS:
+            case NET_WORK_TYPE_HSPA_PLUS_64QAM:
+            case NET_WORK_TYPE_HSPA_PLUS_MIMO:
                 return '3G';
-            case MACRO_NET_WORK_TYPE_LTE:
+            case NET_WORK_TYPE_LTE:
                 return '4G';
             default:
                 throw new Error(`Unable to determinate network generation from raw current network type : ${currentNetworkType}'`);
@@ -241,10 +254,13 @@ export default class {
             throw new Error('Unable to retrieve signal');
         }
 
-        return {
-            strength: +signal,
-            total: 5
-        };
+        const strength = +signal;
+        this.logger.debug(`Signal strength : ${strength}`);
+
+        const total = 5;
+        this.logger.debug(`Signal total : ${total}`);
+
+        return { strength, total };
     }
 
     private getState(document: Document): State {

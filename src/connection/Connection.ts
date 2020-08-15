@@ -21,7 +21,7 @@ export default class Connection {
     }
 
     private buildLogger(activeLog: boolean): Logger {
-        const logger = log4js.getLogger(substringAfter(__filename, 'telma-4g'));
+        const logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
         logger.level = activeLog ? 'debug' : 'OFF';
         return logger;
     }

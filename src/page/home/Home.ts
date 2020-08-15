@@ -1,50 +1,32 @@
-import { State } from '../../model/home/State';
-import Information from '../../model/home/Information';
 import Connection from '../../connection/Connection';
 import StateWlan from '../../model/home/StateWlan';
 import CurrentConnection from '../../model/home/CurrentConnection';
 import NetworkExtractor from './NetworkExtractor';
+import CurrentConnectionExtractor from './CurrentConnectionExtractor';
+import Network from '../../model/home/Network';
+import WlanStateExtractor from './WlanStateExtractor';
 
 export default class {
 
-    private connection: Connection;
-    private networkExtractor : NetworkExtractor;
+    private networkExtractor: NetworkExtractor;
+    private currentConnectionExtractor: CurrentConnectionExtractor;
+    private stateWlanExtractor: WlanStateExtractor;
 
-    constructor(connection: Connection) {
-        this.connection = connection;
-        this.networkExtractor = new NetworkExtractor(connection);
+    constructor(connection: Connection, activeLog = false) {
+        this.networkExtractor = new NetworkExtractor(connection, activeLog);
+        this.currentConnectionExtractor = new CurrentConnectionExtractor(connection, activeLog);
+        this.stateWlanExtractor = new WlanStateExtractor(connection, activeLog);
     }
 
-    async getInformation(): Promise<Information> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const response = await this.connection.get('/');
-                const document = response.document;
-
-                const network = await this.networkExtractor.getNetwork();
-                resolve({
-                    network,
-                    currentConnection: this.getCurrentConnection(document),
-                    stateWlan: this.getStateWlan(document)
-                });
-            } catch (err) {
-                reject(err);
-            }
-        });
+    async getNetwork(): Promise<Network> {
+        return this.networkExtractor.getNetwork();
     }
 
-    private getCurrentConnection(document: Document): CurrentConnection {
-        return {
-            received: 0,
-            sent: 0,
-            duration: 0
-        };
+    async getCurrentConnection(): Promise<CurrentConnection> {
+        return this.currentConnectionExtractor.getCurrentConnection();
     }
 
-    private getStateWlan(document: Document): StateWlan {
-        return {
-            state: State.DISCONNECTED,
-            users: 0
-        }
+    async getStateWlan(): Promise<StateWlan> {
+        return this.stateWlanExtractor.getStateWlan();
     }
 }
