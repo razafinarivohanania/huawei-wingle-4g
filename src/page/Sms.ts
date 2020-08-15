@@ -1,4 +1,3 @@
-import Login from "../model/Login";
 import Summary from "../model/sms/Summary";
 import Sms from "../model/sms/Sms";
 import Connection from "../connection/Connection";

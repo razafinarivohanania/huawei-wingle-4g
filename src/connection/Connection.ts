@@ -4,6 +4,7 @@ import log4js, { Logger } from 'log4js';
 import { JSDOM } from 'jsdom';
 import { substringAfter } from '../utils/StringUtils';
 import Response from './Response';
+import Tokens from './Tokens';
 
 export default class Connection {
     private baseUrl: string;
@@ -11,6 +12,7 @@ export default class Connection {
     private cookieJar: CookieJar;
     private logger: Logger;
     private requestVerificationToken: string | undefined;
+    private tokens: Tokens;
 
     constructor(baseUrl: string, activeLog = false) {
         this.baseUrl = baseUrl;
@@ -18,6 +20,11 @@ export default class Connection {
         this.cookieJar = new tough.CookieJar();
         this.logger = this.buildLogger(activeLog);
         this.requestVerificationToken = undefined;
+        this.tokens = {
+            requestVerificationToken: '',
+            requestVerificationTokenOne: '',
+            requestVerificcationTokenTwo: ''
+        };
     }
 
     private buildLogger(activeLog: boolean): Logger {
@@ -81,11 +88,12 @@ export default class Connection {
             return await this.get(redirectUrl, maxRedirection - 1);
         }
 
-        this.requestVerificationToken = Connection.getTokenFromHeaders(response);
+        this.tokens = Connection.extractTokens(response);
 
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
+        this.logger.debug(response.headers);
         return {
             status: response.status,
             document
@@ -138,16 +146,17 @@ export default class Connection {
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
-        this.requestVerificationToken = Connection.getTokenFromHeaders(response);
+        this.tokens = Connection.extractTokens(response);
 
+        this.logger.debug(response.headers);
         return {
             status: response.status,
             document
         };
     }
 
-    getRequestVerificationToken() : string | undefined {
-        return this.requestVerificationToken;
+    getTokens(): Tokens {
+        return this.tokens;
     }
 
     private async getCookies(url: string) {
@@ -186,21 +195,34 @@ export default class Connection {
         }
     }
 
-    static getTokenFromHeaders(response: AxiosResponse): string | undefined {
+    static extractTokens(response: AxiosResponse): Tokens {
+        const tokens = {
+            requestVerificationToken: '',
+            requestVerificationTokenOne: '',
+            requestVerificcationTokenTwo: ''
+        };
+
         if (!response) {
-            return;
+            return tokens;
         }
 
         const headers = response.headers;
         if (!headers) {
-            return;
+            return tokens;
         }
 
-        const names = ['__requestverificationtokenone', '__requestverificationtoken'];
-        for (const name of names) {
-            if (headers[name]) {
-                return headers[name];
-            }
+        if (headers.__requestverificationtoken) {
+            tokens.requestVerificationToken = headers.__requestverificationtoken;
         }
+
+        if (headers.__requestverificationtokenone) {
+            tokens.requestVerificationTokenOne = headers.__requestverificationtoken;
+        }
+
+        if (headers.__requestVerificationtokentwo) {
+            tokens.requestVerificcationTokenTwo = headers.__requestverificationtoken;
+        }
+
+        return tokens;
     }
 }

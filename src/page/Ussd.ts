@@ -1,4 +1,3 @@
-import Login from "../model/Login";
 import Connection from "../connection/Connection";
 
 export default class {

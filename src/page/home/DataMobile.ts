@@ -3,23 +3,24 @@ import NetworktExtractor from "./NetworkExtractor";
 import { State } from "../../model/home/State";
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
+import Login from '../../connection/Login';
 
 export default class {
 
-    private username: string;
-    private password: string;
+    private login: Login;
     private connection: Connection;
     private logger: Logger;
 
-    constructor(username: string, password: string, connection: Connection, activeLog: boolean) {
-        this.username = username;
-        this.password = password;
+    constructor(login: Login, connection: Connection, activeLog: boolean) {
+        this.login = login;
         this.connection = connection;
         this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 
     async connect(): Promise<boolean> {
+        await this.connection.get('/');
+
         if (await this.isConnected()) {
             this.logger.debug(`Already connected, no need to connect`);
             return true;
@@ -29,6 +30,8 @@ export default class {
     }
 
     async disconnect(): Promise<boolean> {
+        await this.connection.get('/');
+
         if (await this.isConnected()) {
             return false;
         }

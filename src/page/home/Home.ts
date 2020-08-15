@@ -6,6 +6,7 @@ import CurrentConnectionExtractor from './CurrentConnectionExtractor';
 import Network from '../../model/home/Network';
 import WlanStateExtractor from './WlanStateExtractor';
 import DataMobile from './DataMobile';
+import Login from '../../connection/Login';
 
 export default class {
 
@@ -14,11 +15,11 @@ export default class {
     private stateWlanExtractor: WlanStateExtractor;
     private dataMobile: DataMobile;
 
-    constructor(username: string, password: string, connection: Connection, activeLog = false) {
+    constructor(login: Login, connection: Connection, activeLog = false) {
         this.networkExtractor = new NetworkExtractor(connection, activeLog);
         this.currentConnectionExtractor = new CurrentConnectionExtractor(connection, activeLog);
         this.stateWlanExtractor = new WlanStateExtractor(connection, activeLog);
-        this.dataMobile = new DataMobile(username, password, connection, activeLog);
+        this.dataMobile = new DataMobile(login, connection, activeLog);
     }
 
     getNetwork(): Promise<Network> {
