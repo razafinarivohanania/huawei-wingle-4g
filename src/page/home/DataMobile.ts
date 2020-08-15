@@ -18,30 +18,38 @@ export default class {
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 
-    async connect(): Promise<boolean> {
+    async connect(): Promise<void> {
         await this.connection.get('/');
 
         if (await this.isConnected()) {
             this.logger.debug(`Already connected, no need to connect`);
-            return true;
+            return;
         }
 
         await this.login.login();
-        await this.switchDataMobile(true);
-
-        return false;
-    }
-
-    async disconnect(): Promise<boolean> {
-        await this.connection.get('/');
-
-        if (await this.isConnected()) {
-            return false;
+        if (await this.switchDataMobile(true)) {
+            this.logger.debug('Connecting data mobile with success');
+            return;
         }
 
-        //TODO
-        this.logger.debug(`Already disconnected, no need to disconnect`);
-        return true;
+        throw new Error('Unable to connect data mobile');
+    }
+
+    async disconnect(): Promise<void> {
+        await this.connection.get('/');
+
+        if (!(await this.isConnected())) {
+            this.logger.debug(`Already disconnected, no need to disconnect`);
+            return;
+        }
+
+        await this.login.login();
+        if (await this.switchDataMobile(false)) {
+            this.logger.debug('Disconnecting data mobile with success');
+            return;
+        }
+
+        throw new Error('Unable to disconnect data mobile');
     }
 
     private async isConnected(): Promise<boolean> {
@@ -60,9 +68,11 @@ export default class {
         }
     }
 
-    private async switchDataMobile(isToConnect: boolean): Promise<void> {
+    private async switchDataMobile(isToConnect: boolean): Promise<boolean> {
         const dataSwitch = isToConnect ? 1 : 0;
         const parameters = `<?xml version: "1.0" encoding="UTF-8"?><request><dataswitch>${dataSwitch}</dataswitch></request>`;
 
+        const response = await this.connection.post('/api/dialup/mobile-dataswitch', parameters);
+        return Connection.isSuccess(response);
     }
 }

@@ -8,9 +8,10 @@ export default function ask(question: string, authoriseEmpty = false): Promise<s
         });
 
         rl.question(question, async answer => {
+            rl.close();
+
             if (answer || authoriseEmpty) {
                 resolve(answer);
-                rl.close();
                 return;
             }
 

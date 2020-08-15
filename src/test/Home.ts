@@ -13,7 +13,12 @@ import Login from '../connection/Login';
     const login = new Login(username, password, connection, activeLog);
     const home = new Home(login, connection, activeLog);
 
+    //await home.connectDataMobile();
+    await home.disconnectDataMobile();
     await home.connectDataMobile();
+    await home.disconnectDataMobile();
+    await home.connectDataMobile();
+    //await home.disconnectDataMobile();
     /*await home.getNetwork();
     await home.getCurrentConnection();
     await home.getStateWlan();*/

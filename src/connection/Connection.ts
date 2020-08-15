@@ -89,7 +89,7 @@ export default class Connection {
         }
 
         this.logger.debug('Header', response.headers);
-        this.logger.debug('Response', response.data);
+        //this.logger.debug('Response', response.data);
         return {
             status: response.status,
             document
@@ -97,6 +97,9 @@ export default class Connection {
     }
 
     async post(url: string, parameters: string, maxRedirection = 5): Promise<Response> {
+
+        console.log(this.tokens);
+
         if (url.startsWith('/')) {
             url = `${this.baseUrl}${url}`;
         }
@@ -111,9 +114,12 @@ export default class Connection {
             data: parameters
         };
 
+        const token = this.peekToken();
         request.headers = {
-            __RequestVerificationToken: this.peekToken()
+            __RequestVerificationToken: token
         };
+
+        console.log(token);
 
         this.logger.debug('Request', request);
 
@@ -147,7 +153,7 @@ export default class Connection {
         this.storeTokensFromHeaders(response, document);
 
         this.logger.debug('Headers', response.headers);
-        this.logger.debug('Response', response.data);
+        //this.logger.debug('Response', response.data);
         return {
             status: response.status,
             document
@@ -201,25 +207,30 @@ export default class Connection {
         }
 
         if (headers.__RequestVerificationTokenone) {
+            this.tokens = [];
             this.tokens.push(headers.__RequestVerificationTokenone);
             if (headers.__RequestVerificationTokentwo) {
                 this.tokens.push(headers.__RequestVerificationTokentwo);
             }
         } else if (headers.__requestverificationtokenone) {
+            this.tokens = [];
             this.tokens.push(headers.__requestverificationtokenone);
-            if (headers.__requestVerificationtokentwo) {
-                this.tokens.push(headers.__requestVerificationtokentwo);
+            if (headers.__requestverificationtokentwo) {
+                this.tokens.push(headers.__requestverificationtokentwo);
             }
         } else if (headers.__RequestVerificationToken) {
             this.tokens.push(headers.__RequestVerificationToken);
         } else if (headers.__requestverificationtoken) {
             this.tokens.push(headers.__requestverificationtoken);
         }
+
+        console.log(this.tokens);
     }
 
     private storeTokensFromDocument(document: Document) {
         const metaElements = document.querySelectorAll('meta[name=csrf_token]');
-        if (metaElements) {
+        if (metaElements && metaElements.length) {
+            this.tokens = [];
             for (const metaElement of metaElements) {
                 const token = metaElement?.getAttribute('content');
                 if (token) {

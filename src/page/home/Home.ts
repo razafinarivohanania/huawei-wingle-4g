@@ -34,7 +34,11 @@ export default class {
         return this.stateWlanExtractor.getStateWlan();
     }
 
-    connectDataMobile(): Promise<boolean> {
+    connectDataMobile(): Promise<void> {
         return this.dataMobile.connect();
+    }
+
+    disconnectDataMobile(): Promise<void> {
+        return this.dataMobile.disconnect();
     }
 }
