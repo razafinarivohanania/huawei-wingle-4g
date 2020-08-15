@@ -1,4 +1,4 @@
-import Home from './page/Home';
+import Home from './page/home/Home';
 import Sms from './page/Sms';
 import Statistics from './page/Statistics';
 import Ussd from './page/Ussd';

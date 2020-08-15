@@ -1,4 +1,4 @@
-import Home from '../page/Home';
+import Home from '../page/home/Home';
 import Connection from '../connection/Connection';
 import HuawerWingle4G from '../index';
 
