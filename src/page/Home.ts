@@ -1,4 +1,4 @@
-import { State } from '../model/home/StateWlan';
+import { State } from '../model/home/State';
 import Information from '../model/home/Information';
 import Connection from '../connection/Connection';
 
@@ -12,6 +12,15 @@ export default class {
 
     async getInformation(): Promise<Information> {
         return new Promise(resolve => resolve({
+            network: {
+                type: '',
+                operator: '',
+                signal: {
+                    value: 0,
+                    total: 5
+                },
+                state: State.OFF
+            },
             currentConnection: {
                 received: 0,
                 sent: 0,

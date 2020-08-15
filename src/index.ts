@@ -5,7 +5,7 @@ import Ussd from './page/Ussd';
 import Login from './model/Login';
 import Connection from './connection/Connection';
 
-export default class {
+export default class HuaweiWingle4G {
 
     private login: Login;
     private connection: Connection;
@@ -14,7 +14,7 @@ export default class {
     private statistics: Statistics;
     private ussd: Ussd;
 
-    constructor(host: string, login: Login, activeLog = false) {
+    constructor(login: Login, host = HuaweiWingle4G.getDefaultHost(), activeLog = false) {
         this.login = login;
         this.connection = new Connection(`http://${host}`, activeLog);
         this.home = new Home(this.connection);
@@ -37,5 +37,9 @@ export default class {
 
     getUssd(): Ussd {
         return this.ussd;
+    }
+
+    static getDefaultHost() {
+        return '192.168.8.1';
     }
 };
