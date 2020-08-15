@@ -36,6 +36,10 @@ export default class {
         this.logger.debug('Login success');
     }
 
+    getConnnection(): Connection {
+        return this.connection;
+    }
+
     private async isLogged(): Promise<boolean> {
         const response = await this.connection.get('/api/user/state-login');
         const state = response.document.querySelector('State')?.textContent;

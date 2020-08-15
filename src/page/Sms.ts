@@ -1,17 +1,14 @@
 import Summary from "../model/sms/Summary";
 import Sms from "../model/sms/Sms";
 import Connection from "../connection/Connection";
+import Login from "../connection/Login";
 
 export default class {
 
-    private username: string;
-    private password: string;
-    private connection: Connection;
+    private login: Login;
 
-    constructor(username: string, password: string, connection: Connection) {
-        this.username = username;
-        this.password = password;
-        this.connection = connection;
+    constructor(login: Login) {
+        this.login = login;
     }
 
     async getSummary(): Promise<Summary> {

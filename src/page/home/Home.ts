@@ -15,11 +15,11 @@ export default class {
     private stateWlanExtractor: WlanStateExtractor;
     private dataMobile: DataMobile;
 
-    constructor(login: Login, connection: Connection, activeLog = false) {
-        this.networkExtractor = new NetworkExtractor(connection, activeLog);
-        this.currentConnectionExtractor = new CurrentConnectionExtractor(connection, activeLog);
-        this.stateWlanExtractor = new WlanStateExtractor(connection, activeLog);
-        this.dataMobile = new DataMobile(login, connection, activeLog);
+    constructor(login: Login, activeLog = false) {
+        this.networkExtractor = new NetworkExtractor(login.getConnnection(), activeLog);
+        this.currentConnectionExtractor = new CurrentConnectionExtractor(login.getConnnection(), activeLog);
+        this.stateWlanExtractor = new WlanStateExtractor(login.getConnnection(), activeLog);
+        this.dataMobile = new DataMobile(login, activeLog);
     }
 
     getNetwork(): Promise<Network> {

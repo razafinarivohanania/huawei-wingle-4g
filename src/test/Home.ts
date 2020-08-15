@@ -11,7 +11,7 @@ import Login from '../connection/Login';
     const activeLog = true;
     const connection = new Connection(`http://${HuawerWingle4G.getDefaultHost()}`, activeLog);
     const login = new Login(username, password, connection, activeLog);
-    const home = new Home(login, connection, activeLog);
+    const home = new Home(login, activeLog);
 
     //await home.connectDataMobile();
     await home.disconnectDataMobile();

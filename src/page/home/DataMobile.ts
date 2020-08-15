@@ -11,9 +11,9 @@ export default class {
     private connection: Connection;
     private logger: Logger;
 
-    constructor(login: Login, connection: Connection, activeLog: boolean) {
+    constructor(login: Login, activeLog: boolean) {
         this.login = login;
-        this.connection = connection;
+        this.connection = login.getConnnection();
         this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }

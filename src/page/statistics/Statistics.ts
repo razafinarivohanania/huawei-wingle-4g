@@ -1,18 +1,14 @@
-import Statistics from "../model/statistics/Statistics";
-import DataPlan from "../model/statistics/DataPlan";
-import WlanClient from "../model/statistics/WlanClient";
-import Connection from "../connection/Connection";
+import Statistics from "../../model/statistics/Statistics";
+import DataPlan from "../../model/statistics/DataPlan";
+import WlanClient from "../../model/statistics/WlanClient";
+import Login from "../../connection/Login";
 
 export default class {
 
-    private username: string;
-    private password: string;
-    private connection: Connection;
+    private login: Login;
 
-    constructor(username: string, password: string, connection: Connection) {
-        this.username = username;
-        this.password = password;
-        this.connection = connection;
+    constructor(login: Login) {
+        this.login = login;
     }
 
     async getStatistics(): Promise<Statistics> {
