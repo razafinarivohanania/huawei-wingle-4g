@@ -7,6 +7,6 @@ export default interface Network {
         total: number
     },
     type: string,
-    operator: string,
+    operator: string | null | undefined,
     state: State
 };
