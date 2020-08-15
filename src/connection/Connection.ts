@@ -4,25 +4,20 @@ import log4js, { Logger } from 'log4js';
 import { JSDOM } from 'jsdom';
 import { substringAfter } from '../utils/StringUtils';
 import Response from './Response';
-import Tokens from './Tokens';
 
 export default class Connection {
     private baseUrl: string;
     private connection: AxiosInstance;
     private cookieJar: CookieJar;
     private logger: Logger;
-    private tokens: Tokens;
+    private tokens: string[];
 
     constructor(baseUrl: string, activeLog = false) {
         this.baseUrl = baseUrl;
         this.connection = this.createConnection();
         this.cookieJar = new tough.CookieJar();
         this.logger = this.buildLogger(activeLog);
-        this.tokens = {
-            requestVerificationToken: '',
-            requestVerificationTokenOne: '',
-            requestVerificationTokenTwo: ''
-        };
+        this.tokens = [];
     }
 
     private buildLogger(activeLog: boolean): Logger {
@@ -89,19 +84,8 @@ export default class Connection {
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
-        const tokens = this.extractTokens(response, document);
-
-        if (tokens.requestVerificationToken) {
-            console.log('TAFIDITRA');
-            this.tokens.requestVerificationToken = tokens.requestVerificationToken;
-        }
-
-        if (tokens.requestVerificationTokenOne) {
-            this.tokens.requestVerificationTokenOne = tokens.requestVerificationTokenOne;
-        }
-
-        if (tokens.requestVerificationTokenTwo) {
-            this.tokens.requestVerificationTokenTwo = tokens.requestVerificationTokenTwo;
+        if (response.headers['content-type'] === 'text/html') {
+            this.storeTokensFromDocument(document);
         }
 
         this.logger.debug('Header', response.headers);
@@ -112,7 +96,7 @@ export default class Connection {
         };
     }
 
-    async post(url: string, parameters: string, additionalHeaders: any, maxRedirection = 5): Promise<Response> {
+    async post(url: string, parameters: string, maxRedirection = 5): Promise<Response> {
         if (url.startsWith('/')) {
             url = `${this.baseUrl}${url}`;
         }
@@ -127,9 +111,9 @@ export default class Connection {
             data: parameters
         };
 
-        if (additionalHeaders) {
-            request.headers = additionalHeaders;
-        }
+        request.headers = {
+            __RequestVerificationToken: this.peekToken()
+        };
 
         this.logger.debug('Request', request);
 
@@ -160,7 +144,7 @@ export default class Connection {
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
-        this.tokens = this.extractTokens(response, document);
+        this.storeTokensFromHeaders(response, document);
 
         this.logger.debug('Headers', response.headers);
         this.logger.debug('Response', response.data);
@@ -168,10 +152,6 @@ export default class Connection {
             status: response.status,
             document
         };
-    }
-
-    getTokens(): Tokens {
-        return this.tokens;
     }
 
     private async getCookies(url: string) {
@@ -210,45 +190,64 @@ export default class Connection {
         }
     }
 
-    extractTokens(response: AxiosResponse, document: Document): Tokens {
-        const tokens = {
-            requestVerificationToken: this.tokens.requestVerificationToken,
-            requestVerificationTokenOne: this.tokens.requestVerificationTokenOne,
-            requestVerificationTokenTwo: this.tokens.requestVerificationTokenTwo
-        };
-
+    private storeTokensFromHeaders(response: AxiosResponse, document: Document) {
         if (!response) {
-            return tokens;
+            return;
         }
 
         const headers = response.headers;
         if (!headers) {
-            return tokens;
+            return;
         }
 
-        if (headers.__requestverificationtoken) {
-            tokens.requestVerificationToken = headers.__requestverificationtoken;
-        } else {
-            const requestVerificationTokenFromDocument = this.extractRequestVerificationTokenFromDocument(document);
-            if (requestVerificationTokenFromDocument) {
-                tokens.requestVerificationToken = requestVerificationTokenFromDocument;
+        if (headers.__RequestVerificationTokenone) {
+            this.tokens.push(headers.__RequestVerificationTokenone);
+            if (headers.__RequestVerificationTokentwo) {
+                this.tokens.push(headers.__RequestVerificationTokentwo);
             }
+        } else if (headers.__requestverificationtokenone) {
+            this.tokens.push(headers.__requestverificationtokenone);
+            if (headers.__requestVerificationtokentwo) {
+                this.tokens.push(headers.__requestVerificationtokentwo);
+            }
+        } else if (headers.__RequestVerificationToken) {
+            this.tokens.push(headers.__RequestVerificationToken);
+        } else if (headers.__requestverificationtoken) {
+            this.tokens.push(headers.__requestverificationtoken);
         }
-
-        if (headers.__requestverificationtokenone) {
-            tokens.requestVerificationTokenOne = headers.__requestverificationtoken;
-        }
-
-        if (headers.__requestVerificationtokentwo) {
-            tokens.requestVerificationTokenTwo = headers.__requestverificationtoken;
-        }
-
-        return tokens;
     }
 
-    private extractRequestVerificationTokenFromDocument(document: Document) : string {
-        const metaElement = document.querySelector('meta[name=csrf_token]');
-        const requestVerificationToken = metaElement?.getAttribute('content');
-        return requestVerificationToken ? requestVerificationToken : '';
+    private storeTokensFromDocument(document: Document) {
+        const metaElements = document.querySelectorAll('meta[name=csrf_token]');
+        if (metaElements) {
+            for (const metaElement of metaElements) {
+                const token = metaElement?.getAttribute('content');
+                if (token) {
+                    this.tokens.push(token);
+                }
+            }
+        }
+    }
+
+    private peekToken(): string {
+        if (!this.tokens.length) {
+            throw new Error('No request verification token');
+        }
+
+        const token = this.tokens[0];
+        this.tokens.splice(0, 1);
+        return token;
+    }
+
+    getToken(): string {
+        if (!this.tokens.length) {
+            throw new Error('No request verification token');
+        }
+
+        return this.tokens[0];
+    }
+
+    static isSuccess(response: Response): boolean {
+        return response.document.querySelector('response')?.textContent === 'OK';
     }
 }

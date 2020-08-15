@@ -27,6 +27,7 @@ export default class {
         }
 
         await this.login.login();
+        await this.switchDataMobile(true);
 
         return false;
     }
@@ -57,5 +58,11 @@ export default class {
             default:
                 throw new Error(`Unable to determinate if is is connected or not from state : ${state}`);
         }
+    }
+
+    private async switchDataMobile(isToConnect: boolean): Promise<void> {
+        const dataSwitch = isToConnect ? 1 : 0;
+        const parameters = `<?xml version: "1.0" encoding="UTF-8"?><request><dataswitch>${dataSwitch}</dataswitch></request>`;
+
     }
 }

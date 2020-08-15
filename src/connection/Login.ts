@@ -28,12 +28,8 @@ export default class {
         }
 
         const parameters = this.buildLoginParameters();
-        const headers = {
-            __RequestVerificationToken: this.connection.getTokens().requestVerificationToken
-        };
-
-        const response = await this.connection.post('/api/user/login', parameters, headers);
-        if (!this.isSuccess(response)) {
+        const response = await this.connection.post('/api/user/login', parameters);
+        if (!Connection.isSuccess(response)) {
             throw new Error(`Login failed`);
         }
 
@@ -55,7 +51,7 @@ export default class {
     }
 
     private buildLoginParameters() {
-        const encryptedPassword = this.encryptPassword(this.connection.getTokens().requestVerificationToken);
+        const encryptedPassword = this.encryptPassword(this.connection.getToken());
         return `<?xml version: "1.0" encoding="UTF-8"?><request><Username>${this.username}</Username><Password>${encryptedPassword}</Password><password_type>4</password_type></request>`;
     }
 
@@ -73,9 +69,5 @@ export default class {
         }
 
         return base64encode(sha256(this.username + base64encode(sha256(this.password)) + requestVerificationToken));
-    }
-
-    private isSuccess(response: Response): boolean {
-        return response.document.querySelector('response')?.textContent === 'OK';
     }
 }
