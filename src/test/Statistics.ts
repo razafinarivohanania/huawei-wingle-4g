@@ -5,5 +5,8 @@ import Statistics from '../page/statistics/Statistics';
     const activeLog = true;
     const login = await builLogin(activeLog);
     const statistics = new Statistics(login, activeLog);
+
     await statistics.getStatistics();
+    await statistics.getConnectedWlanClients();
+    await statistics.getBlacklistedWlanClients();
 })();

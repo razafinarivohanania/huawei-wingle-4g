@@ -3,6 +3,5 @@ export default interface WlanClient {
     ipAddress: string,
     hostName: string,
     macAddress: string,
-    duration: string,
-    operation: string//TODO
+    duration: number
 };
