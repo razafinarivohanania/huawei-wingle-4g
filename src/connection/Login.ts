@@ -2,6 +2,8 @@ import Connection from "./Connection";
 
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../utils/StringUtils';
+import base64encode from '../third-party/huawei/base64encode';
+import sha256 from '../third-party/huawei/sha256';
 
 export default class {
 
@@ -18,8 +20,9 @@ export default class {
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 
-    private async login(): Promise<void> {
+    async login(): Promise<void> {
         if (await this.isLogged()) {
+            this.logger.debug(`Already logged, no need to login`);
             return;
         }
 
@@ -39,5 +42,21 @@ export default class {
             default:
                 throw new Error('Unable to derminate if logged or not');
         }
+    }
+
+    private encryptPassword(requestVerificationToken: string): string {
+        if (!requestVerificationToken) {
+            throw new Error('Request verification token is blank');
+        }
+
+        if (!this.username) {
+            throw new Error('Username is blank');
+        }
+
+        if (!this.password) {
+            throw new Error('Password is blank');
+        }
+
+        return base64encode(sha256(this.username + base64encode(sha256(this.password)) + requestVerificationToken));
     }
 }

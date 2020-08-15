@@ -26,6 +26,8 @@ export default class {
             return true;
         }
 
+        await this.login.login();
+
         return false;
     }
 
@@ -36,6 +38,7 @@ export default class {
             return false;
         }
 
+        //TODO
         this.logger.debug(`Already disconnected, no need to disconnect`);
         return true;
     }

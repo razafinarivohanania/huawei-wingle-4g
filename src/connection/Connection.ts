@@ -11,7 +11,6 @@ export default class Connection {
     private connection: AxiosInstance;
     private cookieJar: CookieJar;
     private logger: Logger;
-    private requestVerificationToken: string | undefined;
     private tokens: Tokens;
 
     constructor(baseUrl: string, activeLog = false) {
@@ -19,11 +18,10 @@ export default class Connection {
         this.connection = this.createConnection();
         this.cookieJar = new tough.CookieJar();
         this.logger = this.buildLogger(activeLog);
-        this.requestVerificationToken = undefined;
         this.tokens = {
             requestVerificationToken: '',
             requestVerificationTokenOne: '',
-            requestVerificcationTokenTwo: ''
+            requestVerificationTokenTwo: ''
         };
     }
 
@@ -88,10 +86,23 @@ export default class Connection {
             return await this.get(redirectUrl, maxRedirection - 1);
         }
 
-        this.tokens = Connection.extractTokens(response);
-
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
+
+        const tokens = this.extractTokens(response, document);
+
+        if (tokens.requestVerificationToken) {
+            console.log('TAFIDITRA');
+            this.tokens.requestVerificationToken = tokens.requestVerificationToken;
+        }
+
+        if (tokens.requestVerificationTokenOne) {
+            this.tokens.requestVerificationTokenOne = tokens.requestVerificationTokenOne;
+        }
+
+        if (tokens.requestVerificationTokenTwo) {
+            this.tokens.requestVerificationTokenTwo = tokens.requestVerificationTokenTwo;
+        }
 
         this.logger.debug(response.headers);
         return {
@@ -146,7 +157,7 @@ export default class Connection {
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
-        this.tokens = Connection.extractTokens(response);
+        this.tokens = this.extractTokens(response, document);
 
         this.logger.debug(response.headers);
         return {
@@ -195,11 +206,11 @@ export default class Connection {
         }
     }
 
-    static extractTokens(response: AxiosResponse): Tokens {
+    extractTokens(response: AxiosResponse, document: Document): Tokens {
         const tokens = {
-            requestVerificationToken: '',
-            requestVerificationTokenOne: '',
-            requestVerificcationTokenTwo: ''
+            requestVerificationToken: this.tokens.requestVerificationToken,
+            requestVerificationTokenOne: this.tokens.requestVerificationTokenOne,
+            requestVerificationTokenTwo: this.tokens.requestVerificationTokenTwo
         };
 
         if (!response) {
@@ -213,6 +224,11 @@ export default class Connection {
 
         if (headers.__requestverificationtoken) {
             tokens.requestVerificationToken = headers.__requestverificationtoken;
+        } else {
+            const requestVerificationTokenFromDocument = this.extractRequestVerificationTokenFromDocument(document);
+            if (requestVerificationTokenFromDocument) {
+                tokens.requestVerificationToken = requestVerificationTokenFromDocument;
+            }
         }
 
         if (headers.__requestverificationtokenone) {
@@ -220,9 +236,15 @@ export default class Connection {
         }
 
         if (headers.__requestVerificationtokentwo) {
-            tokens.requestVerificcationTokenTwo = headers.__requestverificationtoken;
+            tokens.requestVerificationTokenTwo = headers.__requestverificationtoken;
         }
 
         return tokens;
+    }
+
+    private extractRequestVerificationTokenFromDocument(document: Document) : string {
+        const metaElement = document.querySelector('meta[name=csrf_token]');
+        const requestVerificationToken = metaElement?.getAttribute('content');
+        return requestVerificationToken ? requestVerificationToken : '';
     }
 }
