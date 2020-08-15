@@ -17,12 +17,18 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url":"git+https://github.com/razafinarivohanania/huawei-wingle-4g"
+    "url": "git+https://github.com/razafinarivohanania/huawei-wingle-4g"
   },
   "dependencies": {
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "jsdom": "^16.4.0",
+    "log4js": "^6.3.0",
+    "tough-cookie": "^4.0.0"
   },
   "devDependencies": {
+    "@types/jsdom": "^16.2.3",
+    "@types/node": "^14.0.27",
+    "@types/tough-cookie": "^4.0.0",
     "rimraf": "^3.0.2",
     "typescript": "^3.9.7"
   }
