@@ -14,7 +14,7 @@
     "4G"
   ],
   "author": "RAZAFINARIVO Hanania <razafi.hanania@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/razafinarivohanania/huawei-wingle-4g"
