@@ -11,10 +11,10 @@ This is a module NodeJS allowing to drive Huawei Wingle 4G. This module can :
 
 This module is oriented to follow admin user interface. It treats 4 essential pages :
 
-* Home
-* Statistics
-* SMS
-* Check services
+* [Home](https://github.com/razafinarivohanania/huawei-wingle-4g/blob/master/documentation/home.md)
+* [Statistics](https://github.com/razafinarivohanania/huawei-wingle-4g/blob/master/documentation/statistics.md)
+* [SMS](https://github.com/razafinarivohanania/huawei-wingle-4g/blob/master/documentation/sms.md)
+* [Check services](https://github.com/razafinarivohanania/huawei-wingle-4g/blob/master/documentation/ussd.md)
 
 <p align="center">
     <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/pages.png?raw=true" alt="Pages"/>
