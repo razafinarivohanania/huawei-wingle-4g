@@ -15,6 +15,7 @@ export default class {
 
     activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
+        this.login.activeLog(activeLog);
     }
 
     async sendUssd(ussd: string): Promise<string> {

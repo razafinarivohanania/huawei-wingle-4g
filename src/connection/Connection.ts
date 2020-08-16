@@ -20,7 +20,7 @@ export default class Connection {
         this.tokens = [];
     }
 
-    private activeLog(activeLog: boolean) {
+    activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 
@@ -87,7 +87,7 @@ export default class Connection {
         }
 
         this.logger.debug('Header', response.headers);
-        //this.logger.debug('Response', response.data);
+        this.logger.debug('Response', response.data);
         return {
             status: response.status,
             document

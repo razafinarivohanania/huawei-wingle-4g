@@ -2,11 +2,10 @@ import Home from '../page/home/Home';
 import buildLogin from './LoginBuilder';
 
 (async () => {
-    const activeLog = true;
-
-    const login = await buildLogin(activeLog);
+    const login = await buildLogin();
+    
     const home = new Home(login);
-    home.activeLog(activeLog);
+    home.activeLog(true);
 
     await home.getNetwork(),
     await home.getCurrentConnection();

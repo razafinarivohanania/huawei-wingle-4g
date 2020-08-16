@@ -123,6 +123,7 @@ export default class NetworktExtractor {
 
     activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
+        this.connection.activeLog(activeLog);
     }
 
     async getNetwork(): Promise<Network> {

@@ -15,6 +15,7 @@ export default class {
 
     activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
+        this.connection.activeLog(activeLog);
     }
 
     async getCurrentConnection(): Promise<CurrentConnection> {

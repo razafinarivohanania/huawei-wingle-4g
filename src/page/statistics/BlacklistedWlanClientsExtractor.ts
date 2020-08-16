@@ -19,6 +19,7 @@ export default class {
 
     activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
+        this.login.activeLog(activeLog);
     }
 
     async getBlacklistedWlanClients(): Promise<WlanClient[]> {
@@ -32,8 +33,14 @@ export default class {
         const ssidElements = document.querySelectorAll('Ssids > Ssid');
         if (ssidElements && ssidElements.length) {
             ssidElements.forEach(ssidElement => {
+                let hostName;
+                try {
+                    hostName = getFieldValue(ssidElement, 'wifihostname0', 'Host name blacklisted client', this.logger);
+                } catch (err) {
+                    return;
+                }
+
                 const id = getFieldValue(ssidElement, 'Index', 'ID blacklisted client', this.logger);
-                const hostName = getFieldValue(ssidElement, 'wifihostname0', 'Host name blacklisted client', this.logger);
                 const macAddress = getFieldValue(ssidElement, 'WifiMacFilterMac0', 'Mac address blacklisted client', this.logger);
                 blacklistedWlanClients.push({ id, ipAddress: '', hostName, macAddress, duration: 0 });
             })

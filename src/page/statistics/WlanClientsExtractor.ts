@@ -19,6 +19,7 @@ export default class {
 
     activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
+        this.login.activeLog(activeLog);
     }
 
     async getWlanClients(): Promise<WlanClient[]> {
