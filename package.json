@@ -13,14 +13,11 @@
     "Wingle",
     "4G"
   ],
-  "author": "RAZAFINARIVO Hanania",
+  "author": "RAZAFINARIVO Hanania <razafi.hanania@gmail.com>",
   "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/razafinarivohanania/huawei-wingle-4g"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
     "axios": "^0.19.2",
