@@ -1,7 +1,14 @@
 export enum State {
     SENT,
     READ,
-    UNREAD
+    UNREAD,
+    DRAFT
+};
+
+export enum Type {
+    INBOX,
+    OUTBOX,
+    DRAFT
 };
 
 export default interface Sms {

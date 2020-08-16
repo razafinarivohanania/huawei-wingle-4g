@@ -6,7 +6,9 @@ import Sms from '../../../src/page/sms/Sms';
 
     const sms = new Sms(login);
     sms.activeLog(true);
-    
+
     await sms.getSummary();
-    await sms.getInboxSms();
+    await sms.getInboxSmsList();
+    await sms.getOutboxSmsList();
+    await sms.getDraftSmsList();
 })();

@@ -3,6 +3,6 @@ export default interface Summary {
         unread: number,
         total: number
     },
-    sent: number,
+    outbox: number,
     draft: number
 };

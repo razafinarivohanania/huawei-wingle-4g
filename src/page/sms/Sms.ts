@@ -1,5 +1,5 @@
 import Summary from "../../model/sms/Summary";
-import Sms from "../../model/sms/Sms";
+import Sms, { Type } from "../../model/sms/Sms";
 import Login from "../../connection/Login";
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
@@ -31,16 +31,16 @@ export default class {
         return this.summaryExtractor.getSummary();
     }
 
-    getInboxSms(): Promise<Sms[]> {
-        return this.inboxSmsExtractor.getInboxSms();
+    getInboxSmsList(): Promise<Sms[]> {
+        return this.inboxSmsExtractor.getSmsList(Type.INBOX);
     }
 
-    async getSentSms(): Promise<Sms[]> {
-        return new Promise(resolve => resolve([]));//TODO
+    getOutboxSmsList(): Promise<Sms[]> {
+        return this.inboxSmsExtractor.getSmsList(Type.OUTBOX);
     }
 
-    async getDraftSms(): Promise<Sms[]> {
-        return new Promise(resolve => resolve([]));//TODO
+    async getDraftSmsList(): Promise<Sms[]> {
+        return this.inboxSmsExtractor.getSmsList(Type.DRAFT);
     }
 
     async sendSms(phoneNumbers: string | string[], content: string): Promise<void> {

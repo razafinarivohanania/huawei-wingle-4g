@@ -39,7 +39,7 @@ export default class {
                 unread: +unread,
                 total: +total
             },
-            sent: +sent,
+            outbox: +sent,
             draft: +draft
         };
     }
