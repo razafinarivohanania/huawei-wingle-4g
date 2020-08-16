@@ -1,8 +1,8 @@
 import Connection from '../../connection/Connection'
-import StateWlan from '../../model/home/StateWlan';
-import { State } from '../../model/home/State';
+import { WlanInformation } from '../../model/home/WlanInformation';
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
+import { WlanStatus } from '../../model/home/WlanStatus';
 
 export default class {
 
@@ -19,7 +19,7 @@ export default class {
         this.connection.activeLog(activeLog);
     }
 
-    async getStateWlan(): Promise<StateWlan> {
+    async getWlanInformation(): Promise<WlanInformation> {
         await this.connection.openHomePage();
 
         const response = await this.connection.get('/api/monitoring/status');
@@ -35,12 +35,12 @@ export default class {
             throw new Error('Unable to retrieve users count');
         }
 
-        const state = wifiStatus === '1' ? State.ON : State.OFF;
-        this.logger.debug(`State : ${state}`);
+        const status = wifiStatus === '1' ? WlanStatus.ON : WlanStatus.OFF;
+        this.logger.debug(`State : ${status}`);
 
         const users = +currentWifiUser;
         this.logger.debug(`Users : ${users}`);
 
-        return { state, users };
+        return { status, users };
     }
 }

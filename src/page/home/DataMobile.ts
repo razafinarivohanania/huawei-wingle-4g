@@ -1,6 +1,6 @@
 import Connection from "../../connection/Connection";
 import NetworktExtractor from "./NetworkExtractor";
-import { State } from "../../model/home/State";
+import { NetworkStatus } from "../../model/home/NetworkStatus";
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
 import Login from '../../connection/Login';
@@ -58,13 +58,13 @@ export default class {
     private async isConnected(): Promise<boolean> {
         const response = await this.connection.get('/api/monitoring/status');
         const document = response.document;
-        const state = await NetworktExtractor.getState(document);
+        const state = await NetworktExtractor.getNetworkStatus(document);
         switch (state) {
-            case State.CONNECTED:
-            case State.CONNECTING:
+            case NetworkStatus.CONNECTED:
+            case NetworkStatus.CONNECTING:
                 return true;
-            case State.DISCONNECTED:
-            case State.DISCONNECTING:
+            case NetworkStatus.DISCONNECTED:
+            case NetworkStatus.DISCONNECTING:
                 return false;
             default:
                 throw new Error(`Unable to determinate if is is connected or not from state : ${state}`);

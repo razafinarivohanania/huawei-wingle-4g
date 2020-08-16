@@ -1,4 +1,4 @@
-export default interface CurrentConnection {
+export interface CurrentConnection {
     received: number,
     sent: number,
     duration: number

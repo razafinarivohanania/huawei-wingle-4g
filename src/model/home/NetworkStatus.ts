@@ -1,6 +1,4 @@
-export enum State {
-    ON,
-    OFF,
+export enum NetworkStatus {
     CONNECTING,
     CONNECTED,
     DISCONNECTED,

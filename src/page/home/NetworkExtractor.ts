@@ -1,6 +1,6 @@
 import Connection from "../../connection/Connection";
 import Network, { Signal } from "../../model/home/Network";
-import { State } from '../../model/home/State';
+import { NetworkStatus } from '../../model/home/NetworkStatus';
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
 
@@ -138,15 +138,10 @@ export default class NetworktExtractor {
         this.logger.debug(`Type : ${type}`);
 
         const signal = this.getSignal(statusDocument);
-        const state = NetworktExtractor.getState(statusDocument);
-        this.logger.debug(`State : ${state}`);
+        const status = NetworktExtractor.getNetworkStatus(statusDocument);
+        this.logger.debug(`Status : ${status}`);
 
-        return {
-            type,
-            operator,
-            signal,
-            state
-        };
+        return { type, operator, signal, status };
     }
 
     private async getOperator(): Promise<string> {
@@ -267,7 +262,7 @@ export default class NetworktExtractor {
         return { strength, total };
     }
 
-    static getState(document: Document): State {
+    static getNetworkStatus(document: Document): NetworkStatus {
         const connectionStatusElement = document.querySelector('ConnectionStatus');
         const connectionStatus = connectionStatusElement?.textContent;
 
@@ -276,20 +271,20 @@ export default class NetworktExtractor {
         }
 
         if (DISCONNECTED_STATUS.includes(connectionStatus)) {
-            return State.DISCONNECTED;
+            return NetworkStatus.DISCONNECTED;
         }
 
         switch (connectionStatus) {
             case STATISTIC_TRAFFIC_EXCEEDED_LIMITED:
-                return State.STATISTIC_TRAFFIC_EXCEEDED_LIMITED;
+                return NetworkStatus.STATISTIC_TRAFFIC_EXCEEDED_LIMITED;
             case CONNECTING_STATUS:
-                return State.CONNECTING;
+                return NetworkStatus.CONNECTING;
             case DISCONNECTING_STATUS:
-                return State.DISCONNECTING;
+                return NetworkStatus.DISCONNECTING;
             case CONNECTED_STATUS:
-                return State.CONNECTED;
+                return NetworkStatus.CONNECTED;
             default:
-                return State.DISCONNECTED;
+                return NetworkStatus.DISCONNECTED;
         }
     }
 }

@@ -1,5 +1,5 @@
 import Connection from "../../connection/Connection";
-import CurrentConnection from "../../model/home/CurrentConnection";
+import { CurrentConnection } from "../../model/home/CurrentConnection";
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
 

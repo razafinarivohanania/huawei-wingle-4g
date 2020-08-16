@@ -9,7 +9,7 @@ import buildLogin from '../../LoginBuilder';
 
     await home.getNetwork(),
     await home.getCurrentConnection();
-    await home.getStateWlan();
+    await home.getWlanInformation();
     await home.disconnectDataMobile();
     await home.connectDataMobile();
 })();

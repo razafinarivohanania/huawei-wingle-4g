@@ -1,10 +1,9 @@
-import Connection from '../../connection/Connection';
-import StateWlan from '../../model/home/StateWlan';
-import CurrentConnection from '../../model/home/CurrentConnection';
+import { WlanInformation } from '../../model/home/WlanInformation';
+import { CurrentConnection } from '../../model/home/CurrentConnection';
 import NetworkExtractor from './NetworkExtractor';
 import CurrentConnectionExtractor from './CurrentConnectionExtractor';
 import Network from '../../model/home/Network';
-import WlanStateExtractor from './WlanStateExtractor';
+import WlanStatusExtractor from './WlanStatusExtractor';
 import DataMobile from './DataMobile';
 import Login from '../../connection/Login';
 
@@ -12,20 +11,20 @@ export class Home {
 
     private networkExtractor: NetworkExtractor;
     private currentConnectionExtractor: CurrentConnectionExtractor;
-    private stateWlanExtractor: WlanStateExtractor;
+    private wlanStatusExtractor: WlanStatusExtractor;
     private dataMobile: DataMobile;
 
     constructor(login: Login) {
         this.networkExtractor = new NetworkExtractor(login.getConnnection());
         this.currentConnectionExtractor = new CurrentConnectionExtractor(login.getConnnection());
-        this.stateWlanExtractor = new WlanStateExtractor(login.getConnnection());
+        this.wlanStatusExtractor = new WlanStatusExtractor(login.getConnnection());
         this.dataMobile = new DataMobile(login);
     }
 
     activeLog(activeLog: boolean) {
         this.networkExtractor.activeLog(activeLog);
         this.currentConnectionExtractor.activeLog(activeLog);
-        this.stateWlanExtractor.activeLog(activeLog);
+        this.wlanStatusExtractor.activeLog(activeLog);
         this.dataMobile.activeLog(activeLog);
     }
 
@@ -37,8 +36,8 @@ export class Home {
         return this.currentConnectionExtractor.getCurrentConnection();
     }
 
-    getStateWlan(): Promise<StateWlan> {
-        return this.stateWlanExtractor.getStateWlan();
+    getWlanInformation(): Promise<WlanInformation> {
+        return this.wlanStatusExtractor.getWlanInformation();
     }
 
     connectDataMobile(): Promise<void> {
