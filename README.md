@@ -3,8 +3,9 @@
 This is a module NodeJS allowing to drive Huawei Wingle 4G. This module can :
 
 * get connection state
-* send or get SMS
-* send USSD code and get response
+* enable or disable mobile data
+* send/read/remove SMS or store it in draft
+* send/reply USSD code and get response
 
 # Conception
 
