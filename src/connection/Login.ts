@@ -2,8 +2,8 @@ import Connection from "./Connection";
 
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../utils/StringUtils';
-import base64encode from '../third-party/huawei/base64encode';
-import sha256 from '../third-party/huawei/sha256';
+import base64encode from '../../third-party/huawei/base64encode';
+import sha256 from '../../third-party/huawei/sha256';
 
 export default class {
 

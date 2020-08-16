@@ -68,6 +68,7 @@
   },
   "include": [
     "src",
+    "third-party",
     "test"
   ]
 }
