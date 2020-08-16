@@ -6,7 +6,7 @@
   "types": "lib",
   "scripts": {
     "build": "rimraf lib && tsc -p .",
-    "test": "npm run build && node lib/test/page/home/Home.js && node lib/test/page/statistics/Statistics.js"
+    "test": "npm run build && node lib/test/page/home/Home.js && node lib/test/page/statistics/Statistics.js && node lib/test/page/sms/Sms.js"
   },
   "keywords": [
     "Huawei",

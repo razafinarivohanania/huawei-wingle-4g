@@ -3,31 +3,28 @@ import Sms from "../../model/sms/Sms";
 import Login from "../../connection/Login";
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
+import SummaryExtractor from "./SummaryExtractor";
 
 export default class {
 
     private login: Login;
     private logger: Logger;
+    private summaryExtractor: SummaryExtractor;
 
     constructor(login: Login) {
         this.login = login;
         this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
+        this.summaryExtractor = new SummaryExtractor(login);
     }
 
     activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
         this.login.activeLog(activeLog);
+        this.summaryExtractor.activeLog(activeLog);
     }
 
-    async getSummary(): Promise<Summary> {
-        return new Promise(resolve => resolve({
-            inbox: {
-                seen: 0,
-                total: 0
-            },
-            sent: 0,
-            draft: 0
-        }));//TODO
+    getSummary(): Promise<Summary> {
+        return this.summaryExtractor.getSummary();
     }
 
     async getInboxSms(): Promise<Sms[]> {

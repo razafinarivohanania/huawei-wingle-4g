@@ -1,6 +1,6 @@
 export default interface Summary {
     inbox: {
-        seen: number,
+        unread: number,
         total: number
     },
     sent: number,
