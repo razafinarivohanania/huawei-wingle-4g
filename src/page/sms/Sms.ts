@@ -5,6 +5,8 @@ import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
 import SummaryExtractor from "./SummaryExtractor";
 import InboxSmsExtractor from "./InboxSmsExtractor";
+import SmsAsRead from "./SmsAsRead";
+import { runInThisContext } from "vm";
 
 export default class {
 
@@ -12,12 +14,14 @@ export default class {
     private logger: Logger;
     private summaryExtractor: SummaryExtractor;
     private inboxSmsExtractor: InboxSmsExtractor;
+    private smsAsRead: SmsAsRead;
 
     constructor(login: Login) {
         this.login = login;
         this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
         this.summaryExtractor = new SummaryExtractor(login);
         this.inboxSmsExtractor = new InboxSmsExtractor(login, this.summaryExtractor);
+        this.smsAsRead = new SmsAsRead(login);
     }
 
     activeLog(activeLog: boolean) {
@@ -25,6 +29,7 @@ export default class {
         this.login.activeLog(activeLog);
         this.summaryExtractor.activeLog(activeLog);
         this.inboxSmsExtractor.activeLog(activeLog);
+        this.smsAsRead.activeLog(activeLog);
     }
 
     getSummary(): Promise<Summary> {
@@ -39,8 +44,12 @@ export default class {
         return this.inboxSmsExtractor.getSmsList(Type.OUTBOX);
     }
 
-    async getDraftSmsList(): Promise<Sms[]> {
+    getDraftSmsList(): Promise<Sms[]> {
         return this.inboxSmsExtractor.getSmsList(Type.DRAFT);
+    }
+
+    setSmsAsRead(smsId: string): Promise<void> {
+        return this.smsAsRead.setSmsAsRead(smsId);
     }
 
     async sendSms(phoneNumbers: string | string[], content: string): Promise<void> {
