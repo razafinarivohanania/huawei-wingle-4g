@@ -3,3 +3,4 @@ screenshot/
 src/
 test/
 third-party/
+tsconfig.json
