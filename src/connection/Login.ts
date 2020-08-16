@@ -2,8 +2,7 @@ import Connection from "./Connection";
 
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../utils/StringUtils';
-import base64encode from '../../third-party/huawei/base64encode';
-import sha256 from '../../third-party/huawei/sha256';
+import { encodeBase64, encodeSha256 } from '../utils/EncodeUtils';
 
 export default class {
 
@@ -75,6 +74,6 @@ export default class {
             throw new Error('Password is blank');
         }
 
-        return base64encode(sha256(this.username + base64encode(sha256(this.password)) + requestVerificationToken));
+        return encodeBase64(encodeSha256(this.username + encodeBase64(encodeSha256(this.password)) + requestVerificationToken));
     }
 }

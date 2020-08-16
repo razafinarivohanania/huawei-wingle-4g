@@ -1,6 +1,6 @@
 {
   "name": "huawei-wingle-4g",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "",
   "main": "lib/src/index.js",
   "types": "lib/src/index.ts",
@@ -23,6 +23,7 @@
     "axios": "^0.19.2",
     "jsdom": "^16.4.0",
     "log4js": "^6.3.0",
+    "sha256": "^0.2.0",
     "tough-cookie": "^4.0.0"
   },
   "devDependencies": {
