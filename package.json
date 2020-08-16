@@ -2,11 +2,11 @@
   "name": "huawei-wingle-4g",
   "version": "1.0.2",
   "description": "",
-  "main": "lib/index.js",
+  "main": "lib/src/index.js",
   "types": "lib",
   "scripts": {
     "build": "rimraf lib && tsc -p .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run build && node lib/test/page/home/Home.js && node lib/test/page/statistics/Statistics.js"
   },
   "keywords": [
     "Huawei",

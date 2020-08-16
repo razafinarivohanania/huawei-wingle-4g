@@ -1,5 +1,5 @@
-import builLogin from './LoginBuilder';
-import Statistics from '../page/statistics/Statistics';
+import builLogin from '../../LoginBuilder';
+import Statistics from '../../../src/page/statistics/Statistics';
 
 (async () => {
     const login = await builLogin();

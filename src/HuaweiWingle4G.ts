@@ -24,6 +24,8 @@ export default class HuaweiWingle4G {
 
     activeLog(activeLog: boolean){
         this.home.activeLog(activeLog);
+        this.sms.activeLog(activeLog);
+
     }
 
     getHome(): Home {
