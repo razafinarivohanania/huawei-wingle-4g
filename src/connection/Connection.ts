@@ -118,8 +118,6 @@ export default class Connection {
             __RequestVerificationToken: token
         };
 
-        console.log(token);
-
         this.logger.debug('Request', request);
 
         if (cookies) {

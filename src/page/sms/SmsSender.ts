@@ -97,7 +97,7 @@ export default class {
             await this.sleep();
         }
 
-        return results;
+        throw new Error(`Attempt to verify SMS sent reached max authorised : ${MAX_TRY_VERIFYING_SMS_SENT}`);
     }
 
     private sleep(): Promise<void> {
