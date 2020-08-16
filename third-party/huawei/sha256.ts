@@ -1,4 +1,4 @@
-'use strict';
+// Code extracted from http://192.168.8.1/js/main.js and convert to TypeScript
 
 export default function sha256(s: string): string {
 

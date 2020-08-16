@@ -1,1 +1,1 @@
-All code here are copied from Huawei wingle 4G E83772 admin user interface.
+`base64encode.ts` and `sha256.ts` are code extracted from `http://192.168.8.1/js/main.js`. In other words, theses codes are extracted from Huawei Wingle 4G device.
