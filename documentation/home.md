@@ -4,10 +4,10 @@ This documentation treats admin user interface Home page. The module is able to 
 
 * Network
 * Current connection
-* WLAN status
+* WLAN information
 
 <p align="center">
-    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home.png?raw=true" alt="Home page"/>
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/home.png?raw=true" alt="Home page"/>
 </p>
 
 # Import Home
@@ -40,7 +40,7 @@ const strength = network.signal.strength;
 In the following screenshot, strengh value will be `1`.
 
 <p align="center">
-    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/strength.png?raw=true" alt="Strength"/>
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/strength.png?raw=true" alt="Strength"/>
 </p>
 
 * **Signal max strength**
@@ -52,7 +52,7 @@ const maxStrength = network.signal.total;
 In the following screenshot, max strengh value will be `5`.
 
 <p align="center">
-    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/strength.png?raw=true" alt="Max strength"/>
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/strength.png?raw=true" alt="Max strength"/>
 </p>
 
 * **Phone operator**
@@ -63,7 +63,7 @@ const phoneOperator = network.operator
 In the following screenshot, phone operator value will be `TELMA`.
 
 <p align="center">
-    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/telma.png?raw=true" alt="Telma"/>
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/telma.png?raw=true" alt="Telma"/>
 </p>
 
 * **Network type**
@@ -75,7 +75,7 @@ const networkType = network.type;
 In the following screenshot, metwork type value will be `4G`.
 
 <p align="center">
-    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/4g.png?raw=true" alt="4G"/>
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/4g.png?raw=true" alt="4G"/>
 </p>
 
 Network type can take one of value :
@@ -88,18 +88,18 @@ Network type can take one of value :
 
 **NB** : An exception will be thrown if it cannot figure out it.
 
-* **Network state**
+* **Network status**
 
 ```js
-const networkState = network.state;
+const networkStatus = network.status;
 ```
 
-Network state is an enumeration which is defined by :
+Network status is an enumeration which is defined by :
 
 ```ts
-enum State {
-    ON,
-    OFF,
+// src/model/NetworkStatus.ts
+
+enum NetworkStatus {
     CONNECTING,
     CONNECTED,
     DISCONNECTED,
@@ -111,28 +111,32 @@ enum State {
 **NB** : Because it is a TypeScript, after compilation each value of enum will be converted to number. So to work effectively, follow the code style below :
 
 ```js
-const { State } = require('huawei-wingle-4g/lib/src/model/home/State');
+const { NetworkStatus } = require('huawei-wingle-4g/lib/src/model/home/NetworkStatus');
 
 //Some code
 
-const networkState = network.state;
-switch (networkState) {
-    case State.CONNECTED:
+const networkStatus = network.status;
+switch (networkStatus) {
+    case NetworkStatus.CONNECTED:
         //Do something
         break;
-    case State.CONNECTING:
+    case NetworkStatus.CONNECTING:
         //Do something
         break;
-    case State.DISCONNECTING:
+    case NetworkStatus.DISCONNECTING:
         //Do something
         break;
-    case State.DISCONNECTED:
+    case NetworkStatus.DISCONNECTED:
         //Do something;
         break;
     }
 ```
 
-**NB** : As we can see `ON` and `OFF` value is not handled. Indeed, theses two states never appears for network state.
+In the following screenshot, network status will be equals to `NetworkStatus.CONNECTED`.
+
+<p align="center">
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/connected.png?raw=true" alt="Connected"/>
+</p>
 
 # Get current connection information
 
@@ -151,7 +155,7 @@ const duration = currentConnection.duration;
 In the following screenshot, duration will be `5810000` ms.
 
 <p align="center">
-    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/duration.png?raw=true" alt="Duration"/>
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/duration.png?raw=true" alt="Duration"/>
 </p>
 
 **NB** : Duration unit is millisecond.
@@ -165,7 +169,7 @@ const receivedData = currentConnection.received;
 In the following screenshot, received data will be `28 206 694` byte.
 
 <p align="center">
-    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/received.png?raw=true" alt="Received data"/>
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/received.png?raw=true" alt="Received data"/>
 </p>
 
 **NB** : Received data unit is byte
@@ -178,11 +182,68 @@ const sentData = currentConnection.sent;
 In the following screenshot, send data will be `5 431 623` byte.
 
 <p align="center">
-    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/sent.png?raw=true" alt="Received data"/>
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/sent.png?raw=true" alt="Sent data"/>
 </p>
 
 **NB** : Sent data unit is byte
 
-# Get WLAN status
+# Get WLAN information
 
-TODO
+```js
+const wlanInformation = await home.getWlanInformation();
+```
+
+It contains theses information :
+
+* **WLAN status**
+
+```js
+const wlanStatus = wlanInformation.status;
+```
+
+Wlan status is an enumeration which is defined by :
+
+```ts
+// src/model/WlanStatus.ts
+
+export enum WlanStatus {
+    ON,
+    OFF
+};
+```
+
+**NB** : Because it is a TypeScript, after compilation each value of enum will be converted to number. So to work effectively, follow the code style below :
+
+```js
+const { WlanStatus } = require('huawei-wingle-4g/lib/src/model/home/WlanStatus');
+
+//Some code
+
+const wlanStatus = wlanInformation.status;
+switch (wlanStatus) {
+    case WlanStatus.ON:
+        //Do something
+        break;
+    case WlanStatus.ON:
+        //Do something
+        break;
+    }
+```
+
+In the following screenshot, wlan status will be equals to `WlanStatus.ON`.
+
+<p align="center">
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/on.png?raw=true" alt="On"/>
+</p>
+
+* **Users count**
+
+```js
+const users = wlanInformation.users;
+```
+
+In the following screenshot, users count will be `0`.
+
+<p align="center">
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/no-user.png?raw=true" alt="On"/>
+</p>

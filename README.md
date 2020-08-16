@@ -58,10 +58,11 @@ This will print something like this:
   type: '4G',
   operator: 'TELMA',
   signal: { strength: 1, total: 5 },
-  state: 3
+  status: 3
 }
 ```
 
 # State
 
-It's in progress ...
+* Base features implemented
+* Documentation in progress ...
