@@ -6,7 +6,7 @@ import { substringAfter } from '../../utils/StringUtils';
 import SummaryExtractor from "./SummaryExtractor";
 import InboxSmsExtractor from "./InboxSmsExtractor";
 import SmsAsRead from "./SmsAsRead";
-import { runInThisContext } from "vm";
+import SmsRemover from "./SmsRemover";
 
 export default class {
 
@@ -15,6 +15,7 @@ export default class {
     private summaryExtractor: SummaryExtractor;
     private inboxSmsExtractor: InboxSmsExtractor;
     private smsAsRead: SmsAsRead;
+    private smsRemover: SmsRemover;
 
     constructor(login: Login) {
         this.login = login;
@@ -22,6 +23,7 @@ export default class {
         this.summaryExtractor = new SummaryExtractor(login);
         this.inboxSmsExtractor = new InboxSmsExtractor(login, this.summaryExtractor);
         this.smsAsRead = new SmsAsRead(login);
+        this.smsRemover = new SmsRemover(login);
     }
 
     activeLog(activeLog: boolean) {
@@ -30,6 +32,7 @@ export default class {
         this.summaryExtractor.activeLog(activeLog);
         this.inboxSmsExtractor.activeLog(activeLog);
         this.smsAsRead.activeLog(activeLog);
+        this.smsRemover.activeLog(activeLog);
     }
 
     getSummary(): Promise<Summary> {
@@ -60,7 +63,7 @@ export default class {
         return new Promise(resolve => resolve());//TODO
     }
 
-    async removeSms(ids: string | string[]): Promise<void> {
-        return new Promise(resolve => resolve());//TODO
+    removeSms(smsIds: string | string[]): Promise<void> {
+        return this.smsRemover.removeSms(smsIds);
     }
 }

@@ -10,13 +10,20 @@ import { State } from '../../../src/model/sms/Sms';
 
     await sms.getSummary();
 
-    const inboxSmsList = await sms.getInboxSmsList();
+    let inboxSmsList = await sms.getInboxSmsList();
     for (const inboxSms of inboxSmsList) {
         if (inboxSms.state == State.UNREAD) {
             await sms.setSmsAsRead(inboxSms.id);
             break;
         }
     }
+
+    inboxSmsList = await sms.getInboxSmsList();
+    const smsIds: string[] = [];
+    for (let i = 0; i < inboxSmsList.length && i < 2; i++) {
+        smsIds.push(inboxSmsList[i].id);
+    }
+    await sms.removeSms(smsIds);
 
     await sms.getOutboxSmsList();
     await sms.getDraftSmsList();

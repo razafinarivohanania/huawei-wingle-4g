@@ -27,11 +27,11 @@ export default class {
         await this.login.login();
 
         const response = await this.connection.post('/api/sms/set-read', parameters);
-        if (!Connection.isSuccess(response)) {
+        if (Connection.isSuccess(response)) {
+            this.logger.debug('SMS set as read with success');
+        } else {
             throw new Error('Unable to set SMS as read');
         }
-
-        this.logger.debug('SMS set as read with success');
     }
 
     private buildParameters(smsId: string): string {

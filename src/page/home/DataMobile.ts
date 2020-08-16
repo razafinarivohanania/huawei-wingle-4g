@@ -50,10 +50,9 @@ export default class {
         await this.login.login();
         if (await this.switchDataMobile(false)) {
             this.logger.debug('Disconnecting data mobile with success');
-            return;
+        } else {
+            throw new Error('Unable to disconnect data mobile');
         }
-
-        throw new Error('Unable to disconnect data mobile');
     }
 
     private async isConnected(): Promise<boolean> {

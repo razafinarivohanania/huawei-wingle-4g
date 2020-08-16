@@ -32,11 +32,11 @@ export default class {
 
         const parameters = this.buildLoginParameters();
         const response = await this.connection.post('/api/user/login', parameters);
-        if (!Connection.isSuccess(response)) {
+        if (Connection.isSuccess(response)) {
+            this.logger.debug('Login success');
+        } else {
             throw new Error(`Login failed`);
         }
-
-        this.logger.debug('Login success');
     }
 
     getConnnection(): Connection {

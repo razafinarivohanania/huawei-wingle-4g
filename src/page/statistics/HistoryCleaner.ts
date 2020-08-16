@@ -26,10 +26,10 @@ export default class {
 
         const parameters = '<?xml version: "1.0" encoding="UTF-8"?><request><ClearTraffic>1</ClearTraffic></request>';
         const response = await this.connection.post('/api/monitoring/clear-traffic', parameters);
-        if (!Connection.isSuccess(response)) {
+        if (Connection.isSuccess(response)) {
+            this.logger.debug('Stastistics history clear with success');
+        } else {
             throw new Error('Unable to clear statistics history');
         }
-
-        this.logger.debug('Stastistics history clear with success');
     }
 }

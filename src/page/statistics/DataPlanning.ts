@@ -27,11 +27,11 @@ export default class {
 
         const parameters = this.buildParameters(dataPlan);
         const response = await this.connection.post('/api/monitoring/start_date', parameters);
-        if (!Connection.isSuccess(response)) {
+        if (Connection.isSuccess(response)) {
+            this.logger.debug('Updating data plan done with success');
+        } else {
             throw new Error('Unable to update data plan');
         }
-
-        this.logger.debug('Updating data plan done with success');
     }
 
     private buildParameters(dataPlan: DataPlan): string {
