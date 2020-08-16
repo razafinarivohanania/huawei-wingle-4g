@@ -9,6 +9,8 @@ import SmsAsRead from "./SmsAsRead";
 import SmsRemover from "./SmsRemover";
 import SmsInDraft from "./SmsInDraft";
 import { connect } from "http2";
+import SmsSender from "./SmsSender";
+import { timeStamp } from "console";
 
 export default class {
 
@@ -19,6 +21,7 @@ export default class {
     private smsAsRead: SmsAsRead;
     private smsRemover: SmsRemover;
     private smsInDraft: SmsInDraft;
+    private smsSender: SmsSender;
 
     constructor(login: Login) {
         this.login = login;
@@ -28,6 +31,7 @@ export default class {
         this.smsAsRead = new SmsAsRead(login);
         this.smsRemover = new SmsRemover(login);
         this.smsInDraft = new SmsInDraft(login);
+        this.smsSender = new SmsSender(login);
     }
 
     activeLog(activeLog: boolean) {
@@ -37,6 +41,7 @@ export default class {
         this.inboxSmsExtractor.activeLog(activeLog);
         this.smsAsRead.activeLog(activeLog);
         this.smsRemover.activeLog(activeLog);
+        this.smsSender.activeLog(activeLog);
     }
 
     getSummary(): Promise<Summary> {
@@ -59,8 +64,8 @@ export default class {
         return this.smsAsRead.setSmsAsRead(smsId);
     }
 
-    async sendSms(phoneNumbers: string | string[], content: string): Promise<void> {
-        return new Promise(resolve => resolve());//TODO
+    sendSms(phoneNumbers: string | string[], content: string): Promise<Map<string, boolean>> {
+        return this.smsSender.sendSms(phoneNumbers, content);
     }
 
     saveSmsInDraft(phoneNumbers: string | string[], content: string): Promise<void> {
