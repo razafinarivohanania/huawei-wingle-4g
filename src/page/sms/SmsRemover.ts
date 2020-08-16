@@ -16,6 +16,7 @@ export default class {
     }
 
     activeLog(activeLog: boolean) {
+        this.login.activeLog(activeLog);
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 
@@ -34,7 +35,7 @@ export default class {
     }
 
     private buildParameters(smsIds: string | string[]): string {
-        const ids: string[] = [];
+        let ids: string[] = [];
 
         if (Array.isArray(smsIds)) {
             smsIds.forEach(smsId => ids.push(smsId));
@@ -42,6 +43,7 @@ export default class {
             ids.push(smsIds);
         }
 
+        ids = ids.filter(id => id);
         if (!ids.length) {
             throw new Error('No SMS id provided');
         }

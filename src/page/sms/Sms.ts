@@ -7,6 +7,8 @@ import SummaryExtractor from "./SummaryExtractor";
 import InboxSmsExtractor from "./InboxSmsExtractor";
 import SmsAsRead from "./SmsAsRead";
 import SmsRemover from "./SmsRemover";
+import SmsInDraft from "./SmsInDraft";
+import { connect } from "http2";
 
 export default class {
 
@@ -16,6 +18,7 @@ export default class {
     private inboxSmsExtractor: InboxSmsExtractor;
     private smsAsRead: SmsAsRead;
     private smsRemover: SmsRemover;
+    private smsInDraft: SmsInDraft;
 
     constructor(login: Login) {
         this.login = login;
@@ -24,6 +27,7 @@ export default class {
         this.inboxSmsExtractor = new InboxSmsExtractor(login, this.summaryExtractor);
         this.smsAsRead = new SmsAsRead(login);
         this.smsRemover = new SmsRemover(login);
+        this.smsInDraft = new SmsInDraft(login);
     }
 
     activeLog(activeLog: boolean) {
@@ -59,8 +63,8 @@ export default class {
         return new Promise(resolve => resolve());//TODO
     }
 
-    async storeSmsInDraft(phoneNumbers: string | string[], content: string): Promise<void> {
-        return new Promise(resolve => resolve());//TODO
+    saveSmsInDraft(phoneNumbers: string | string[], content: string): Promise<void> {
+        return this.smsInDraft.saveSmsInDraft(phoneNumbers, content);
     }
 
     removeSms(smsIds: string | string[]): Promise<void> {
