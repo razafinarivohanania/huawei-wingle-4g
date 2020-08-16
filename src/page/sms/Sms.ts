@@ -8,9 +8,7 @@ import InboxSmsExtractor from "./InboxSmsExtractor";
 import SmsAsRead from "./SmsAsRead";
 import SmsRemover from "./SmsRemover";
 import SmsInDraft from "./SmsInDraft";
-import { connect } from "http2";
 import SmsSender from "./SmsSender";
-import { timeStamp } from "console";
 
 export default class {
 
