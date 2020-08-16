@@ -1,5 +1,5 @@
 import builLogin from '../../LoginBuilder';
-import Sms from '../../../src/page/sms/Sms';
+import { Sms } from '../../../src/page/sms/Sms';
 import { State } from '../../../src/model/sms/Sms';
 
 (async () => {

@@ -1,4 +1,4 @@
-import Statistics from "../../model/statistics/Statistics";
+import StatisticsModel from "../../model/statistics/Statistics";
 import DataPlan from "../../model/statistics/DataPlan";
 import WlanClient from "../../model/statistics/WlanClient";
 import Login from "../../connection/Login";
@@ -8,7 +8,7 @@ import BlacklistedWlanClientsExtractor from "./BlacklistedWlanClientsExtractor";
 import HistoryCleaner from "./HistoryCleaner";
 import DataPlanning from "./DataPlanning";
 
-export default class {
+export class Statistics {
 
     private statisticsExtractor: StatisticsExtractor;
     private wlanClientsExtractor: WlanClientsExtractor;
@@ -32,7 +32,7 @@ export default class {
         this.dataPlanning.activeLog(activeLog);
     }
 
-    getStatistics(): Promise<Statistics> {
+    getStatistics(): Promise<StatisticsModel> {
         return this.statisticsExtractor.getStatistics();
     }
 

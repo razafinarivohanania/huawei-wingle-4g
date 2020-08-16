@@ -1,11 +1,11 @@
 import { Home } from './page/home/Home';
-import Sms from './page/sms/Sms';
-import Statistics from './page/statistics/Statistics';
-import Ussd from './page/ussd/Ussd';
+import { Sms } from './page/sms/Sms';
+import { Statistics } from './page/statistics/Statistics';
+import { Ussd } from './page/ussd/Ussd';
 import Connection from './connection/Connection';
 import Login from './connection/Login';
 
-export default class HuaweiWingle4G {
+export class HuaweiWingle4G {
 
     private home: Home;
     private sms: Sms;

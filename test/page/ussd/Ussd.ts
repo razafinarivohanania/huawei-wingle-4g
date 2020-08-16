@@ -1,5 +1,5 @@
 import buildLogin from "../../LoginBuilder";
-import Ussd from "../../../src/page/ussd/Ussd";
+import { Ussd } from "../../../src/page/ussd/Ussd";
 
 (async () => {
     const login = await buildLogin();

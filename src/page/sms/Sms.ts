@@ -1,5 +1,5 @@
 import Summary from "../../model/sms/Summary";
-import Sms, { Type } from "../../model/sms/Sms";
+import SmsModel, { Type } from "../../model/sms/Sms";
 import Login from "../../connection/Login";
 import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../../utils/StringUtils';
@@ -10,7 +10,7 @@ import SmsRemover from "./SmsRemover";
 import SmsInDraft from "./SmsInDraft";
 import SmsSender from "./SmsSender";
 
-export default class {
+export class Sms {
 
     private login: Login;
     private logger: Logger;
@@ -46,15 +46,15 @@ export default class {
         return this.summaryExtractor.getSummary();
     }
 
-    getInboxSmsList(): Promise<Sms[]> {
+    getInboxSmsList(): Promise<SmsModel[]> {
         return this.inboxSmsExtractor.getSmsList(Type.INBOX);
     }
 
-    getOutboxSmsList(): Promise<Sms[]> {
+    getOutboxSmsList(): Promise<SmsModel[]> {
         return this.inboxSmsExtractor.getSmsList(Type.OUTBOX);
     }
 
-    getDraftSmsList(): Promise<Sms[]> {
+    getDraftSmsList(): Promise<SmsModel[]> {
         return this.inboxSmsExtractor.getSmsList(Type.DRAFT);
     }
 

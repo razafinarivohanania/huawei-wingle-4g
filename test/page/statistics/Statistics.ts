@@ -1,5 +1,5 @@
 import builLogin from '../../LoginBuilder';
-import Statistics from '../../../src/page/statistics/Statistics';
+import { Statistics } from '../../../src/page/statistics/Statistics';
 import { Unit } from '../../../src/model/statistics/DataPlan';
 
 (async () => {

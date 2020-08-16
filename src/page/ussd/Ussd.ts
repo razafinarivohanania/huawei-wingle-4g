@@ -6,7 +6,7 @@ import { substringAfter } from '../../utils/StringUtils';
 const SLEEP_DURATION = 5000;
 const MAX_TRY_RETRIEVING_REMOTE_RESPONSE = 100;
 
-export default class {
+export class Ussd {
 
     private login: Login;
     private connection: Connection;
