@@ -1,4 +1,4 @@
-import Home from '../../../src/page/home/Home';
+import { Home } from '../../../src/page/home/Home';
 import buildLogin from '../../LoginBuilder';
 
 (async () => {

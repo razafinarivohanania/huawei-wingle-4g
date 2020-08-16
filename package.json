@@ -1,9 +1,9 @@
 {
   "name": "huawei-wingle-4g",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "",
   "main": "lib/src/index.js",
-  "types": "lib",
+  "types": "lib/src/index.ts",
   "scripts": {
     "build": "rimraf lib && tsc -p .",
     "test": "npm run build && node lib/test/page/home/Home.js && node lib/test/page/statistics/Statistics.js && node lib/test/page/sms/Sms.js && node lib/test/page/ussd/Ussd.js"

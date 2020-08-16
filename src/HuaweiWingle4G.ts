@@ -1,4 +1,4 @@
-import Home from './page/home/Home';
+import { Home } from './page/home/Home';
 import Sms from './page/sms/Sms';
 import Statistics from './page/statistics/Statistics';
 import Ussd from './page/ussd/Ussd';
@@ -22,7 +22,7 @@ export default class HuaweiWingle4G {
         this.ussd = new Ussd(login);
     }
 
-    activeLog(activeLog: boolean){
+    activeLog(activeLog: boolean) {
         this.home.activeLog(activeLog);
         this.sms.activeLog(activeLog);
         this.statistics.activeLog(activeLog);

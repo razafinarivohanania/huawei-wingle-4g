@@ -8,7 +8,7 @@ import WlanStateExtractor from './WlanStateExtractor';
 import DataMobile from './DataMobile';
 import Login from '../../connection/Login';
 
-export default class {
+export class Home {
 
     private networkExtractor: NetworkExtractor;
     private currentConnectionExtractor: CurrentConnectionExtractor;
