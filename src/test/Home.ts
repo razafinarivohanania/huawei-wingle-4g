@@ -5,7 +5,8 @@ import buildLogin from './LoginBuilder';
     const activeLog = true;
 
     const login = await buildLogin(activeLog);
-    const home = new Home(login, activeLog);
+    const home = new Home(login);
+    home.activeLog(activeLog);
 
     await home.getNetwork(),
     await home.getCurrentConnection();

@@ -4,7 +4,7 @@ import Statistics from '../page/statistics/Statistics';
 (async () => {
     const activeLog = true;
     const login = await builLogin(activeLog);
-    const statistics = new Statistics(login, activeLog);
+    const statistics = new Statistics(login);
 
     await statistics.getStatistics();
     await statistics.getConnectedWlanClients();

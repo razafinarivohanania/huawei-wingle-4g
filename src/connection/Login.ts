@@ -4,7 +4,6 @@ import log4js, { Logger } from 'log4js';
 import { substringAfter } from '../utils/StringUtils';
 import base64encode from '../third-party/huawei/base64encode';
 import sha256 from '../third-party/huawei/sha256';
-import Response from './Response';
 
 export default class {
 
@@ -13,11 +12,14 @@ export default class {
     private logger: Logger;
     private connection: Connection;
 
-    constructor(username: string, password: string, connection: Connection, activeLog: boolean) {
+    constructor(username: string, password: string, connection: Connection) {
         this.username = username;
         this.password = password;
         this.connection = connection;
         this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
+    }
+
+    activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 

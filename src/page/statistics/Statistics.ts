@@ -5,7 +5,6 @@ import Login from "../../connection/Login";
 import StatisticsExtractor from "./StatisticsExtractor";
 import WlanClientsExtractor from "./WlanClientsExtractor";
 import BlacklistedWlanClientsExtractor from "./BlacklistedWlanClientsExtractor";
-import { runInThisContext } from "vm";
 
 export default class {
 
@@ -13,10 +12,14 @@ export default class {
     private wlanClientsExtractor: WlanClientsExtractor;
     private blacklistedWlanClientsExtractor : BlacklistedWlanClientsExtractor;
 
-    constructor(login: Login, activeLog = false) {
-        this.statisticsExtractor = new StatisticsExtractor(login, activeLog);
-        this.wlanClientsExtractor = new WlanClientsExtractor(login, activeLog);
-        this.blacklistedWlanClientsExtractor = new BlacklistedWlanClientsExtractor(login, activeLog);
+    constructor(login: Login) {
+        this.statisticsExtractor = new StatisticsExtractor(login);
+        this.wlanClientsExtractor = new WlanClientsExtractor(login);
+        this.blacklistedWlanClientsExtractor = new BlacklistedWlanClientsExtractor(login);
+    }
+
+    activeLog(activeLog: boolean){
+        this.statisticsExtractor.activeLog(activeLog);
     }
 
     getStatistics(): Promise<Statistics> {

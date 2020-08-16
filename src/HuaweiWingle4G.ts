@@ -12,14 +12,18 @@ export default class HuaweiWingle4G {
     private statistics: Statistics;
     private ussd: Ussd;
 
-    constructor(username: string, password: string, host = HuaweiWingle4G.getDefaultHost(), activeLog = false) {
-        const connection = new Connection(`http://${host}`, activeLog);
-        const login = new Login(username, password, connection, activeLog);
+    constructor(username: string, password: string, host = HuaweiWingle4G.getDefaultHost()) {
+        const connection = new Connection(`http://${host}`);
+        const login = new Login(username, password, connection);
 
-        this.home = new Home(login, activeLog);
-        this.sms = new Sms(login, activeLog);
-        this.statistics = new Statistics(login, activeLog);
-        this.ussd = new Ussd(login, activeLog);
+        this.home = new Home(login);
+        this.sms = new Sms(login);
+        this.statistics = new Statistics(login);
+        this.ussd = new Ussd(login);
+    }
+
+    activeLog(activeLog: boolean){
+        this.home.activeLog(activeLog);
     }
 
     getHome(): Home {

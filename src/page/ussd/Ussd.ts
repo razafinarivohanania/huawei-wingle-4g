@@ -8,9 +8,12 @@ export default class {
     private login: Login;
     private logger: Logger;
 
-    constructor(login: Login, activeLog: boolean) {
+    constructor(login: Login) {
         this.login = login;
         this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
+    }
+
+    activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 

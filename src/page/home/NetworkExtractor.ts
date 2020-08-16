@@ -116,9 +116,12 @@ export default class NetworktExtractor {
     private connection: Connection;
     private logger: Logger;
 
-    constructor(connection: Connection, activeLog: boolean) {
+    constructor(connection: Connection) {
         this.connection = connection;
         this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
+    }
+
+    activeLog(activeLog: boolean) {
         this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 

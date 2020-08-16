@@ -12,18 +12,16 @@ export default class Connection {
     private logger: Logger;
     private tokens: string[];
 
-    constructor(baseUrl: string, activeLog = false) {
+    constructor(baseUrl: string) {
         this.baseUrl = baseUrl;
+        this.logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
         this.connection = this.createConnection();
         this.cookieJar = new tough.CookieJar();
-        this.logger = this.buildLogger(activeLog);
         this.tokens = [];
     }
 
-    private buildLogger(activeLog: boolean): Logger {
-        const logger = log4js.getLogger(substringAfter(__filename, 'huawei-wingle-4g'));
-        logger.level = activeLog ? 'debug' : 'OFF';
-        return logger;
+    private activeLog(activeLog: boolean) {
+        this.logger.level = activeLog ? 'debug' : 'OFF';
     }
 
     private createConnection(): AxiosInstance {
