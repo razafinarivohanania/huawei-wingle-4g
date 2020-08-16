@@ -1,8 +1,8 @@
 export enum State {
     SENT,
-    SEEN,
-    NOT_SEEN
-}
+    READ,
+    UNREAD
+};
 
 export default interface Sms {
     id: string,
