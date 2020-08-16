@@ -23,7 +23,7 @@ export default class {
     }
 
     async getWlanClients(): Promise<WlanClient[]> {
-        await this.connection.get('/');
+        await this.connection.openHomePage();
         await this.login.login();
 
         const response = await this.connection.get('/api/wlan/host-list');

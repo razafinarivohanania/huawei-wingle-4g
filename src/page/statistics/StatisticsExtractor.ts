@@ -2,7 +2,7 @@ import Login from "../../connection/Login";
 import Connection from "../../connection/Connection";
 import Statistics, { MonthlyDataUsed, TotalDataUsed } from "../../model/statistics/Statistics";
 import log4js, { Logger } from 'log4js';
-import { substringAfter } from '../../utils/StringUtils';
+import { substringAfter, toTwo } from '../../utils/StringUtils';
 
 export default class {
 
@@ -22,7 +22,7 @@ export default class {
     }
 
     async getStatistics(): Promise<Statistics> {
-        await this.connection.get('/');
+        await this.connection.openHomePage();
         await this.login.login();
 
         const monthlyDataUsedDocument = await this.connectMonthlyDataUsed();
@@ -140,15 +140,11 @@ export default class {
         const matcher = /(\d+)-(\d+)-(\d+)/.exec(monthLastClearTime);
         if (matcher) {
             const year = matcher[1];
-            const month = this.toTwo(+matcher[2]);
-            const date = this.toTwo(+matcher[3]);
+            const month = toTwo(+matcher[2]);
+            const date = toTwo(+matcher[3]);
             return +new Date(`${year}-${month}-${date}T00:00:00.000Z`);
         }
 
         throw new Error(`Unable to retrieve lase clear time from : ${monthLastClearTime}`);
-    }
-
-    private toTwo(number: number): string {
-        return number < 9 ? `0${number}` : `${number}`;
     }
 }

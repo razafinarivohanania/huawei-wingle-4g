@@ -42,6 +42,10 @@ export default class Connection {
         });
     }
 
+    openHomePage() : Promise<Response> {
+        return this.get('/');
+    }
+
     async get(url: string, maxRedirection = 5): Promise<Response> {
         if (url.startsWith('/')) {
             url = `${this.baseUrl}${url}`;

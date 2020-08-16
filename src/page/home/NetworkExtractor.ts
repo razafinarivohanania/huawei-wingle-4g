@@ -127,7 +127,7 @@ export default class NetworktExtractor {
     }
 
     async getNetwork(): Promise<Network> {
-        await this.connection.get('/');
+        await this.connection.openHomePage();
 
         const statusDocument = await this.connectStatus();
 

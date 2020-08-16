@@ -17,3 +17,7 @@ export function substringAfter(text: string, search: string, isLast = false) {
         '' :
         text.substring(position + search.length);
 }
+
+export function toTwo(number: number): string {
+    return number < 9 ? `0${number}` : `${number}`;
+}

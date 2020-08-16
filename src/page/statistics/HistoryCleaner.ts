@@ -21,7 +21,7 @@ export default class {
     }
 
     async clearHistory() : Promise<void> {
-        await this.connection.get('/');
+        await this.connection.openHomePage();
         await this.login.login();
 
         const parameters = '<?xml version: "1.0" encoding="UTF-8"?><request><ClearTraffic>1</ClearTraffic></request>';

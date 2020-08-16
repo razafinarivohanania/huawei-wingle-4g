@@ -20,7 +20,7 @@ export default class {
     }
 
     async getStateWlan(): Promise<StateWlan> {
-        await this.connection.get('/');
+        await this.connection.openHomePage();
 
         const response = await this.connection.get('/api/monitoring/status');
         const document = response.document;

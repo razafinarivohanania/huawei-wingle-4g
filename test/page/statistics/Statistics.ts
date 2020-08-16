@@ -1,5 +1,6 @@
 import builLogin from '../../LoginBuilder';
 import Statistics from '../../../src/page/statistics/Statistics';
+import { Unit } from '../../../src/model/statistics/DataPlan';
 
 (async () => {
     const login = await builLogin();
@@ -11,4 +12,12 @@ import Statistics from '../../../src/page/statistics/Statistics';
     await statistics.getStatistics();
     await statistics.getConnectedWlanClients();
     await statistics.getBlacklistedWlanClients();
+    await statistics.updateDataPlan({
+        startDate: 1,
+        monthlyDataPlan: {
+            volume: 2,
+            unit: Unit.GB
+        },
+        threshold: 50
+    })
 })();

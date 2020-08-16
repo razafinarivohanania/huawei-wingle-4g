@@ -19,7 +19,7 @@ export default class {
     }
 
     async getCurrentConnection(): Promise<CurrentConnection> {
-        await this.connection.get('/');
+        await this.connection.openHomePage();
 
         const response = await this.connection.get('/api/monitoring/traffic-statistics');
         const document = response.document;

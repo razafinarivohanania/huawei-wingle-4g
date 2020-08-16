@@ -23,7 +23,7 @@ export default class {
     }
 
     async connect(): Promise<void> {
-        await this.connection.get('/');
+        await this.connection.openHomePage();
 
         if (await this.isConnected()) {
             this.logger.debug(`Already connected, no need to connect`);
@@ -40,7 +40,7 @@ export default class {
     }
 
     async disconnect(): Promise<void> {
-        await this.connection.get('/');
+        await this.connection.openHomePage();
 
         if (!(await this.isConnected())) {
             this.logger.debug(`Already disconnected, no need to disconnect`);
