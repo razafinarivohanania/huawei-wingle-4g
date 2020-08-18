@@ -247,3 +247,27 @@ In the following screenshot, users count will be `0`.
 <p align="center">
     <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/no-user.png?raw=true" alt="On"/>
 </p>
+
+# Connect or disconnect data mobile
+
+It's the equivalent of clicking data mobile button.
+
+<p align="center">
+    <img src="https://github.com/razafinarivohanania/huawei-wingle-4g/raw/master/screenshot/home/disable-mobile-data.png?raw=true" alt="Disble mobile dat"/>
+</p>
+
+If you want to connect data mobile :
+
+```js
+await home.connectDataMobile();
+```
+
+**NB** : If data mobile is already connected and you attempt to connect data mobile, it skips process.
+
+else if you want to disconnect data mobile :
+
+```js
+await home.disconnectDataMobile();
+```
+
+**NB** : If data mobile is already disconnected and you attempt to disconnect data mobile, it skips process.
